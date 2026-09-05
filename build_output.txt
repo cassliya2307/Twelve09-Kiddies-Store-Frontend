@@ -1,0 +1,119 @@
+
+> frontend@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.2 (webpack)
+- Environments: .env.local
+✓ Running next.config.ts took 247ms
+
+  Creating an optimized production build ...
+Failed to compile.
+
+./src/app/cart/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\cart\page.tsx:33:1]
+ 30 |           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+ 31 |             <p className="text-sm text-amber-800">Unable to load categories. Some features may not work correctly.</p>
+ 32 |           </div>
+ 33 |         )}
+    :          ^
+ 34 | 
+ 35 |         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+ 36 |           <CartContent categories={categories} />
+    `----
+  x Unterminated regexp literal
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\cart\page.tsx:67:1]
+ 64 |               </div>
+ 65 |             </div>
+ 66 |           </div>
+ 67 |         </div>
+    :          ^^^^^
+ 68 |       </div>
+ 69 |     </>
+ 70 |   );
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/cart/page.tsx
+
+./src/app/checkout/page.tsx
+Error:   x Expected '</', got 'jsx text'
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\checkout\page.tsx:41:1]
+ 38 |               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+ 39 |                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Checkout</h1>
+ 40 |                 <p className="mt-1 text-cream-600">Complete your purchase securely</p>
+ 41 | ,->           </section>
+ 42 | `->         </section>
+ 43 |     
+ 44 |             {categoriesError && (
+ 45 |               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4" role="alert">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/checkout/page.tsx
+
+./src/app/login/page.tsx
+Error:   x Unterminated regexp literal
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\login\page.tsx:64:1]
+ 61 |             </div>
+ 62 |           </div>
+ 63 |         </div>
+ 64 |       </div>
+    :        ^^^^^
+ 65 |     </div>
+ 66 |   );
+ 67 | }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/login/page.tsx
+
+./src/app/page.tsx
+Error:   x Unterminated regexp literal
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\page.tsx:67:1]
+ 64 |             </div>
+ 65 |           </div>
+ 66 |         </div>
+ 67 |       </div>
+    :        ^^^^^
+ 68 |     </>
+ 69 |   );
+ 70 | }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/page.tsx
+
+./src/app/shop/page.tsx
+Error:   x Expected '</', got 'jsx text'
+    ,-[C:\Users\DELL\OneDrive\Desktop\Twelve09 Kiddies Store\frontend\src\app\shop\page.tsx:60:1]
+ 57 |                   <p className="mt-1 text-cream-600">Discover our complete collection of toys and games</p>
+ 58 |                 </div>
+ 59 |               </div>
+ 60 | ,->         </section>
+ 61 | `->       </section>
+ 62 |     
+ 63 |           {categoriesError && (
+ 64 |             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4" role="alert">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/shop/page.tsx
+
+
+> Build failed because of webpack errors

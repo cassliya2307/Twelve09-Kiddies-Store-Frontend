@@ -1,0 +1,18 @@
+
+> frontend@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.2 (webpack)
+- Environments: .env.local
+✓ Running next.config.ts took 139ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 8.1s
+  Running TypeScript ...
+src/app/cart/page.tsx(9,24): error TS2304: Cannot find name 'Metadata'.
+src/app/checkout/page.tsx(8,24): error TS2304: Cannot find name 'Metadata'.
+src/app/login/page.tsx(8,24): error TS2304: Cannot find name 'Metadata'.
+src/app/page.tsx(12,24): error TS2304: Cannot find name 'Metadata'.
+src/app/shop/page.tsx(10,24): error TS2304: Cannot find name 'Metadata'.
+Failed to type check.
+
