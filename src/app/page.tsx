@@ -15,10 +15,33 @@ export const metadata: Metadata = {
   description: "Discover joy in every toy! Shop our curated collection of educational toys, creative games, and delightful surprises for children of all ages.",
 };
 
+import type { Category, ProductListItem } from '@/types/api';
+
 export default async function Home() {
+  let categories: Category[] = [];
+  let products: ProductListItem[] = [];
+
+  try {
+    categories = await getCategories();
+  } catch (error) {
+    categories = [];
+  }
+
+  try {
+    products = await getProducts();
+  } catch (error) {
+    products = [];
+  }
+
   return (
     <div>
-      Home page content
+      <Header />
+      <Hero />
+      <CategorySection categories={categories} />
+      <FeaturedProducts products={products} />
+      <TrustBenefits />
+      <MobileBottomNav />
+      <Footer />
     </div>
   );
 }
