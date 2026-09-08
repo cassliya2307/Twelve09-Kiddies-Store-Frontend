@@ -1,8 +1,10 @@
+import type { Category } from '@/types/api';
+
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { CartContent } from '@/components/cart/CartContent';
-import { getCategories, getHealth } from '@/lib/api';
+import { getCategories } from '@/lib/api';
 import type { Metadata } from 'next';
 
 export const revalidate = 60;
@@ -13,13 +15,20 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
+  let categories: Category[] = [];
+
+  try {
+    categories = await getCategories();
+  } catch (error) {
+    categories = [];
+  }
+
   return (
     <div>
-      Cart page content
+      <Header />
+      <CartContent categories={categories} />
+      <MobileBottomNav />
+      <Footer />
     </div>
   );
-}
-
-async function getCartPageData() {
-  return { categories: [], categoriesError: null, isHealthy: true };
 }

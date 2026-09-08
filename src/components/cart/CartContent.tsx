@@ -204,15 +204,18 @@ export function CartContent({ categories }: CartContentProps) {
               Delivery fee will be calculated at checkout based on your location and delivery method.
             </p>
 
-            <Link href="/shop" className="block mb-3">
-              <Button variant="outline" size="lg" className="w-full">
-                Continue Shopping
-              </Button>
+            <Link
+              href="/shop"
+              className="block mb-3 w-full text-center px-6 py-3 text-base font-medium rounded-xl border border-cream-200 bg-white text-gray-700 hover:bg-cream-50 hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+            >
+              Continue Shopping
             </Link>
-            <Link href="/checkout" className="block">
-              <Button variant="primary" size="lg" className="w-full" disabled={items.length === 0}>
-                Proceed to Checkout
-              </Button>
+            <Link
+              href="/checkout"
+              className={`block w-full text-center px-6 py-3 text-base font-medium rounded-xl bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors ${items.length === 0 ? 'pointer-events-none opacity-50' : ''}`}
+              aria-disabled={items.length === 0}
+            >
+              Proceed to Checkout
             </Link>
 
             <p className="mt-4 text-center text-xs text-cream-500">

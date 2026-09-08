@@ -28,23 +28,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = localStorage.getItem(TOKEN_KEY);
       const storedUser = localStorage.getItem(USER_KEY);
 
-      if (token && storedUser) {
+      if (token) {
+        api.setToken(token);
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            // Guard against malformed stored user (e.g. null, string, missing id)
+            if (parsedUser && typeof parsedUser === 'object' && typeof parsedUser.id === 'number') {
+              setUser(parsedUser);
+            }
+          } catch {
+            // Corrupted stored user — will verify via network or clear
+          }
+        }
         try {
-          api.setToken(token);
-          const parsedUser = JSON.parse(storedUser);
-          setUser(parsedUser);
-          
           // Verify token is still valid by fetching current user
           const freshUser = await getCurrentUser();
           setUser(freshUser);
           localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
         } catch {
-          // Token invalid, clear auth
+          // Token invalid or expired, clear auth
           localStorage.removeItem(TOKEN_KEY);
           localStorage.removeItem(USER_KEY);
           api.setToken(null);
           setUser(null);
         }
+      } else if (storedUser) {
+        // Orphaned user without token — clear stale data
+        localStorage.removeItem(USER_KEY);
+        setUser(null);
       }
       setIsLoading(false);
     };

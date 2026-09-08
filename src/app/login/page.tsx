@@ -1,20 +1,26 @@
+﻿import { Suspense } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
-import { getHealth } from '@/lib/api';
+import { LoginContent } from './LoginContent';
 import type { Metadata } from 'next';
-
-export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Sign In - Twelve09 Kiddies Store",
   description: "Sign in to your Twelve09 Kiddies Store account.",
 };
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
-    <div>
-      Sign in page content
-    </div>
+    <>
+      <Header />
+      <main id="main-content">
+        <Suspense fallback={<div className="mx-auto max-w-md px-4 py-16 sm:py-24 text-center text-cream-600">Loading...</div>}>
+          <LoginContent />
+        </Suspense>
+      </main>
+      <Footer />
+      <MobileBottomNav />
+    </>
   );
 }

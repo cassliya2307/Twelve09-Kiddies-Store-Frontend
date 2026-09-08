@@ -122,7 +122,7 @@ export function CategoryShortcuts({ categories, isLoading, error }: CategoryShor
         </div>
         <div className="text-center mt-8">
           <Link
-            href="/categories"
+            href="/shop"
             className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium transition-colors"
           >
             View All Categories

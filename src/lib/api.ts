@@ -76,12 +76,14 @@ export const api = new ApiClient(API_BASE_URL);
 
 // Categories
 export const getCategories = () => api.get<Category[]>('/categories');
+export const createCategory = (data: { name: string; description?: string | null }) => api.post<Category>('/categories', data);
 
 // Products
 export interface GetProductsParams {
   skip?: number;
   limit?: number;
   include_inactive?: boolean;
+  search?: string;
 }
 
 export const getProducts = (params?: GetProductsParams) => {
@@ -89,11 +91,20 @@ export const getProducts = (params?: GetProductsParams) => {
   if (params?.skip) searchParams.set('skip', params.skip.toString());
   if (params?.limit) searchParams.set('limit', params.limit.toString());
   if (params?.include_inactive) searchParams.set('include_inactive', 'true');
+  if (params?.search) {
+    const trimmed = params.search.trim();
+    if (trimmed) searchParams.set('search', trimmed);
+  }
   const query = searchParams.toString();
   return api.get<ProductListItem[]>(`/products${query ? `?${query}` : ''}`);
 };
 
 export const getProduct = (id: number) => api.get<Product>(`/products/${id}`);
+export const createProduct = (data: ProductCreate) => api.post<Product>(`/products`, data);
+export const updateProduct = (id: number, data: ProductUpdate) => api.put<Product>(`/products/${id}`, data);
+export const activateProduct = (id: number) => api.patch<Product>(`/products/${id}/activate`, {});
+export const deactivateProduct = (id: number) => api.patch<Product>(`/products/${id}/deactivate`, {});
+export const updateProductStock = (id: number, quantity: number) => api.patch<Product>(`/products/${id}/stock`, { quantity });
 
 // Health
 export const getHealth = () => api.get<HealthResponse>('/health');
@@ -132,6 +143,45 @@ export const updatePaymentStatus = (id: number, data: PaymentStatusUpdate) =>
 export const initializePaystackPayment = (data: PaystackInitializeRequest) =>
   api.post<PaystackInitializeResponse>('/payments/paystack/initialize', data);
 
+// Admin dashboard
+export const getAdminDashboard = (days: number = 30) => api.get<DashboardResponse>(`/admin/dashboard?days=${days}`);
+
+// Delivery fee (Admin-only)
+export const getDeliveryFee = () => api.get<DeliveryFeeRead>(`/admin/delivery-fee`);
+export const updateDeliveryFee = (data: DeliveryFeeUpdate) => api.patch<DeliveryFeeRead>(`/admin/delivery-fee`, data);
+
+// Expenses
+export const getExpenses = () => api.get<Expense[]>(`/expenses`);
+export const createExpense = (data: ExpenseCreate) => api.post<Expense>(`/expenses`, data);
+export const updateExpense = (id: number, data: ExpenseCreate) => api.patch<Expense>(`/expenses/${id}`, data);
+export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
+
+// Admin users
+export interface GetAdminUsersParams {
+  role?: string;
+  is_active?: boolean;
+  search?: string;
+  skip?: number;
+  limit?: number;
+}
+export const getAdminUsers = (params?: GetAdminUsersParams) => {
+  const searchParams = new URLSearchParams();
+  if (params?.role) searchParams.set('role', params.role);
+  if (params?.is_active !== undefined) searchParams.set('is_active', String(params.is_active));
+  if (params?.search) {
+    const trimmed = params.search.trim();
+    if (trimmed) searchParams.set('search', trimmed);
+  }
+  if (params?.skip) searchParams.set('skip', params.skip.toString());
+  if (params?.limit) searchParams.set('limit', params.limit.toString());
+  const query = searchParams.toString();
+  return api.get<User[]>(`/admin/users${query ? `?${query}` : ''}`);
+};
+export const updateUserRole = (id: number, data: { role?: string; is_active?: boolean }) =>
+  api.patch<User>(`/admin/users/${id}/role`, data);
+export const updateUserPermissions = (id: number, permissions: string[]) =>
+  api.patch<User>(`/admin/users/${id}/permissions`, permissions);
+
 // Auth
 export const login = (data: LoginRequest) => api.post<AuthTokens>('/auth/login', data);
 export const register = (data: RegisterRequest) => api.post<User>('/auth/register', data);
@@ -141,6 +191,8 @@ import type {
   Category,
   Product,
   ProductListItem,
+  ProductCreate,
+  ProductUpdate,
   HealthResponse,
   Address,
   AddressCreate,
@@ -158,4 +210,9 @@ import type {
   RegisterRequest,
   PaystackInitializeRequest,
   PaystackInitializeResponse,
+  DashboardResponse,
+  Expense,
+  ExpenseCreate,
+  DeliveryFeeRead,
+  DeliveryFeeUpdate,
 } from '@/types/api';

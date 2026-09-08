@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { createContext, useContext, useReducer, useEffect, ReactNode, useCallback } from 'react';
 import type { Product, ProductListItem } from '@/types/api';
@@ -47,7 +47,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         const newItems = [...state.items];
         const maxQuantity = getMaxQuantity(product);
         const newQuantity = Math.min(newItems[existingIndex].quantity + quantity, maxQuantity);
-        newItems[existingIndex] = { ...newItems[existingIndex], quantity: newQuantity };
+        if (newQuantity <= 0) {
+          return { ...state, items: state.items.filter((item) => item.productId !== product.id) };
+        }
+        newItems[existingIndex] = { ...newItems[existingIndex], product, unitPrice: product.price, quantity: newQuantity };
         return { ...state, items: newItems };
       }
 
@@ -98,14 +101,16 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
 
     case 'DECREMENT_QUANTITY': {
-      const newItems = state.items.map((item) => {
-        if (item.productId !== action.payload) return item;
-        const newQuantity = item.quantity - 1;
-        if (newQuantity <= 0) {
-          return { ...item, quantity: 0 };
-        }
-        return { ...item, quantity: newQuantity };
-      });
+      const productId = action.payload;
+      const target = state.items.find((item) => item.productId === productId);
+      if (!target) return state;
+      const newQuantity = target.quantity - 1;
+      if (newQuantity <= 0) {
+        return { ...state, items: state.items.filter((item) => item.productId !== productId) };
+      }
+      const newItems = state.items.map((item) =>
+        item.productId === productId ? { ...item, quantity: newQuantity } : item
+      );
       return { ...state, items: newItems };
     }
 
@@ -114,6 +119,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
     case 'CLAMP_TO_STOCK': {
       const { productId, maxQuantity } = action.payload;
+      if (maxQuantity <= 0) {
+        return { ...state, items: state.items.filter((item) => item.productId !== productId) };
+      }
       const newItems = state.items.map((item) => {
         if (item.productId !== productId) return item;
         if (item.quantity > maxQuantity) {
@@ -176,15 +184,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
         .map((item) => {
           const freshProduct = productMap.get(item.productId);
           if (!freshProduct || !freshProduct.is_active) {
-            return null; // Product no longer available
+            return null;
           }
           const maxQty = freshProduct.stock_quantity ?? 0;
           const clampedQty = Math.min(item.quantity, maxQty);
-          if (clampedQty <= 0) return null; // Out of stock
+          if (clampedQty <= 0) return null;
           const refreshedItem: CartItem = {
             productId: item.productId,
             product: freshProduct,
-            quantity: Math.min(item.quantity, maxQty),
+            quantity: clampedQty,
             unitPrice: freshProduct.price,
           };
           return refreshedItem;
@@ -193,18 +201,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       dispatch({ type: 'REFRESH_CART', payload: refreshedItems });
     } catch {
-      // Silently fail - local cart data remains usable
     }
   }, [state.items]);
 
-  // Initialize cart from localStorage
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          dispatch({ type: 'INIT', payload: parsed });
+          const valid = parsed.filter(
+            (it: unknown) =>
+              typeof it === 'object' &&
+              it !== null &&
+              typeof (it as CartItem).productId === 'number' &&
+              typeof (it as CartItem).quantity === 'number' &&
+              (it as CartItem).product &&
+              typeof (it as CartItem).unitPrice === 'string'
+          );
+          dispatch({ type: 'INIT', payload: valid as CartItem[] });
+        } else {
+          dispatch({ type: 'INIT', payload: [] });
         }
       } else {
         dispatch({ type: 'INIT', payload: [] });
@@ -214,23 +231,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Persist cart to localStorage
   useEffect(() => {
     if (state.isInitialized) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
-      } catch {
-      }
+      } catch {}
     }
   }, [state.items, state.isInitialized]);
 
-  // Refresh cart from server on mount to get current prices/stock
   useEffect(() => {
     if (state.isInitialized && state.items.length > 0) {
       refreshCart();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refresh on mount after initialization
-  }, [state.isInitialized, refreshCart]);
+  }, [state.isInitialized]);
 
   const addToCart = useCallback((product: Product | ProductListItem, quantity: number) => {
     dispatch({ type: 'ADD_ITEM', payload: { product, quantity } });
@@ -304,3 +317,4 @@ export function useCart() {
   }
   return context;
 }
+

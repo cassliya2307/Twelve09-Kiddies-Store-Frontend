@@ -139,13 +139,14 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
           >
             {addedToCart ? 'Added to Cart' : isInCartResult ? 'Update Cart' : 'Add to Cart'}
           </Button>
-          <Link href="/cart" className="hidden sm:flex">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span className="hidden sm:inline">View Cart</span>
-            </Button>
+          <Link
+            href="/cart"
+            className="hidden sm:inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-xl border border-cream-200 bg-white text-gray-700 hover:bg-cream-50 hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span>View Cart</span>
           </Link>
         </div>
 

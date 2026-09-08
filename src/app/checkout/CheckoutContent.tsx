@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -65,7 +65,7 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
     is_default: false,
   });
 
-  // Sync addresses from server after auth – ensures address management changes are reflected at checkout
+  // Sync addresses from server after auth â€“ ensures address management changes are reflected at checkout
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
@@ -155,16 +155,16 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
     setShowAddressForm(true);
   };
 
-  // Validate checkout
-  const handleValidate = useCallback(async () => {
+  // Validate checkout - returns result for immediate use to avoid stale closure
+  const handleValidate = useCallback(async (): Promise<CheckoutValidationResponse | null> => {
     if (items.length === 0) {
       setError('Your cart is empty');
-      return;
+      return null;
     }
 
     if (fulfillmentMethod !== 'STORE_PICKUP' && !selectedAddressId) {
       setError('Please select a delivery address');
-      return;
+      return null;
     }
 
     setValidating(true);
@@ -179,9 +179,11 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
       if (!result.valid) {
         setError(result.errors?.join(', ') || 'Checkout validation failed');
       }
+      return result;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Validation failed';
       setError(message);
+      return null;
     } finally {
       setValidating(false);
     }
@@ -209,20 +211,27 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
     }
   }, [items, selectedAddressId, fulfillmentMethod, user, handleValidate]);
 
-  // Create order
+  // Create order - revalidates fresh to ensure backend-authoritative data
   const handlePlaceOrder = async () => {
-    // Guard against duplicate submissions
     if (isProcessingOrderRef.current) return;
-    
-    // Always revalidate immediately before placing the order to ensure
-    // backend-authoritative prices, stock, and totals are used.
-    await handleValidate();
-    if (!validation?.valid) return;
-
     isProcessingOrderRef.current = true;
     setCreatingOrder(true);
     setError(null);
-
+    let freshValidation: CheckoutValidationResponse | null = null;
+    try {
+      freshValidation = await handleValidate();
+      if (!freshValidation?.valid) {
+        return;
+      }
+    } catch {
+      return;
+    } finally {
+      if (!freshValidation?.valid) {
+        setCreatingOrder(false);
+        isProcessingOrderRef.current = false;
+      }
+    }
+    if (!freshValidation?.valid) return;
     try {
       const request = buildCheckoutRequest();
       const order = await createCheckout(request);
@@ -240,7 +249,7 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
       }
       
       // CASH payment flow
-      // Do NOT clear cart here — CASH requires staff confirmation.
+      // Do NOT clear cart here â€” CASH requires staff confirmation.
       // Cart will be managed by the order confirmation page after staff verifies payment.
       await createPayment({
         order_id: order.id,
@@ -257,20 +266,6 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
       isProcessingOrderRef.current = false;
     }
   };
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login?redirect=/checkout');
-    }
-  }, [user, authLoading, router]);
-
-  // Redirect if cart empty
-  useEffect(() => {
-    if (!authLoading && user && items.length === 0) {
-      router.push('/cart');
-    }
-  }, [items, user, authLoading, router]);
 
   if (authLoading || (user && !validation && items.length > 0 && !validating)) {
     return (
@@ -343,9 +338,19 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
                 ) : (
                   <div className="space-y-3" role="radiogroup" aria-label="Select delivery address">
                     {addresses.map(address => (
-                      <label
+                      <div
                         key={address.id}
-                        className={`relative cursor-pointer p-4 rounded-xl border-2 transition-all ${
+                        role="radio"
+                        aria-checked={selectedAddressId === address.id}
+                        tabIndex={0}
+                        onClick={() => setSelectedAddressId(address.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === ' ' || e.key === 'Enter') {
+                            e.preventDefault();
+                            setSelectedAddressId(address.id);
+                          }
+                        }}
+                        className={`relative cursor-pointer p-4 rounded-xl border-2 transition-all focus:outline-none focus:ring-2 focus:ring-green-500 ${
                           selectedAddressId === address.id
                             ? 'border-green-500 bg-green-50'
                             : 'border-cream-200 hover:border-green-300'
@@ -358,6 +363,8 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
                           checked={selectedAddressId === address.id}
                           onChange={() => setSelectedAddressId(address.id)}
                           className="sr-only"
+                          tabIndex={-1}
+                          aria-hidden="true"
                         />
                         <div className="flex items-start gap-4">
                           <div className="flex-1">
@@ -375,7 +382,7 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
                             )}
                           </div>
                           <div className="flex flex-col gap-2">
-                            <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); handleEditAddress(address); }}>
+                            <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleEditAddress(address); }}>
                               Edit
                             </Button>
                           </div>
@@ -383,7 +390,7 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
                         {selectedAddressId === address.id && (
                           <div className="absolute inset-0 border-2 border-green-500 rounded-xl pointer-events-none" />
                         )}
-                      </label>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -433,61 +440,72 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
               <form onSubmit={handleAddressSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Name *</label>
+                    <label htmlFor="checkout-recipient-name" className="block text-sm font-medium text-gray-700 mb-1">Recipient Name *</label>
                     <input
+                      id="checkout-recipient-name"
                       type="text"
                       value={addressForm.recipient_name}
                       onChange={e => setAddressForm({...addressForm, recipient_name: e.target.value})}
                       required
+                      autoComplete="name"
                       className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                    <label htmlFor="checkout-phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
                     <input
+                      id="checkout-phone"
                       type="tel"
                       value={addressForm.phone_number}
                       onChange={e => setAddressForm({...addressForm, phone_number: e.target.value})}
                       required
+                      autoComplete="tel"
                       className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Address Line *</label>
+                  <label htmlFor="checkout-address-line" className="block text-sm font-medium text-gray-700 mb-1">Address Line *</label>
                   <input
+                    id="checkout-address-line"
                     type="text"
                     value={addressForm.address_line}
                     onChange={e => setAddressForm({...addressForm, address_line: e.target.value})}
                     required
+                    autoComplete="street-address"
                     className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                    <label htmlFor="checkout-city" className="block text-sm font-medium text-gray-700 mb-1">City *</label>
                     <input
+                      id="checkout-city"
                       type="text"
                       value={addressForm.city}
                       onChange={e => setAddressForm({...addressForm, city: e.target.value})}
                       required
+                      autoComplete="address-level2"
                       className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                    <label htmlFor="checkout-state" className="block text-sm font-medium text-gray-700 mb-1">State *</label>
                     <input
+                      id="checkout-state"
                       type="text"
                       value={addressForm.state}
                       onChange={e => setAddressForm({...addressForm, state: e.target.value})}
                       required
+                      autoComplete="address-level1"
                       className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Directions</label>
+                  <label htmlFor="checkout-directions" className="block text-sm font-medium text-gray-700 mb-1">Additional Directions</label>
                   <textarea
+                    id="checkout-directions"
                     value={addressForm.additional_directions}
                     onChange={e => setAddressForm({...addressForm, additional_directions: e.target.value})}
                     rows={2}

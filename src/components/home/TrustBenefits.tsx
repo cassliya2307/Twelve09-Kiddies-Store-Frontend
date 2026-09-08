@@ -87,7 +87,7 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
                 key={benefit.id}
                 className="group flex-1 flex flex-col items-center text-center rounded-xl bg-white p-5 pb-6 shadow-sm hover:shadow-md transition-shadow duration-200 border border-cream-200"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: 'bg-green-100' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-green-100">
                   {benefit.icon}
                 </div>
 

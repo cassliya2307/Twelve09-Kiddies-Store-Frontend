@@ -6,11 +6,21 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 
+function getSafeRedirect(raw: string | null): string {
+  if (!raw) return '/shop';
+  // Only allow same-origin absolute paths
+  if (!raw.startsWith('/')) return '/shop';
+  if (raw.startsWith('//')) return '/shop';
+  if (raw.includes('://')) return '/shop';
+  if (raw.includes('\\')) return '/shop';
+  return raw;
+}
+
 export function LoginContent() {
   const { login, register, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/shop';
+  const redirect = getSafeRedirect(searchParams.get('redirect'));
   const mode = searchParams.get('mode');
 
   const [isLogin, setIsLogin] = useState(mode !== 'register');

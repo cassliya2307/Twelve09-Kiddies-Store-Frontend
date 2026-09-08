@@ -1,21 +1,21 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
-import { Skeleton } from '@/components/ui/Skeleton';
 
 interface Category {
   id: number;
   name: string;
   description: string | null;
+  is_active?: boolean;
   pastelColor?: string;
 }
 
 const categoryPastelColors = [
-  '#E3F2FD', // light blue - Back to School
-  '#FFE8F0', // soft pink - Baby Essentials
-  '#E8F5E9', // light green - Toys & Games
-  '#FFF3E0', // soft orange - Kids Fashion
-  '#F3E5F5', // light purple - Party Packs
+  '#E3F2FD',
+  '#FFE8F0',
+  '#E8F5E9',
+  '#FFF3E0',
+  '#F3E5F5',
 ];
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -52,20 +52,25 @@ function getCategoryIcon(name: string) {
 }
 
 export function CategorySection({ categories }: { categories: Category[] }) {
-  const displayCategories = categories && categories.length > 0 ? categories : [
-    { id: 1, name: 'Back to School', description: 'School supplies and educational toys' },
-    { id: 2, name: 'Baby Essentials', description: 'Diapers, feeding, and nursery items' },
-    { id: 3, name: 'Toys & Games', description: 'Fun and educational games for all ages' },
-    { id: 4, name: 'Kids Fashion', description: 'Clothing and accessories for children' },
-    { id: 5, name: 'Party Packs', description: 'Birthday and celebration bundles' },
-  ];
+  const activeCategories = (categories || []).filter((c) => c.is_active !== false);
+  if (!activeCategories || activeCategories.length === 0) {
+    return (
+      <section className="py-6 bg-cream-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-8">
+            <p className="text-cream-600">No categories available at the moment.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-6 bg-cream-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          {displayCategories.slice(0, 5).map((category) => {
-            const color = category.pastelColor || categoryPastelColors[displayCategories.indexOf(category)];
+          {activeCategories.slice(0, 5).map((category, index) => {
+            const color = category.pastelColor || categoryPastelColors[index % categoryPastelColors.length];
             return (
               <Link
                 key={category.id}
@@ -88,3 +93,4 @@ export function CategorySection({ categories }: { categories: Category[] }) {
     </section>
   );
 }
+

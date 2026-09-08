@@ -320,7 +320,17 @@ export default function AddressesPage() {
   }
 
   if (!isAuthenticated) {
-    return null;
+    return (
+      <>
+        <Header />
+        <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
+          <div className="bg-white rounded-2xl border border-cream-200 p-8 text-center" role="status" aria-live="polite">
+            <p className="text-cream-600">Redirecting to sign in…</p>
+          </div>
+        </main>
+        <MobileBottomNav />
+      </>
+    );
   }
 
   return (

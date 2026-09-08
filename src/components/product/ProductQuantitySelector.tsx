@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,7 @@ interface ProductQuantitySelectorProps {
 }
 
 function clampQuantity(value: number, max: number): number {
+  if (max <= 0) return 0;
   return Math.min(Math.max(1, value), max);
 }
 
@@ -21,6 +22,14 @@ export function ProductQuantitySelector({
   disabled = false,
 }: ProductQuantitySelectorProps) {
   const [quantity, setQuantity] = useState(() => clampQuantity(initialQuantity, maxQuantity));
+
+  useEffect(() => {
+    setQuantity((prev) => {
+      const clamped = clampQuantity(initialQuantity, maxQuantity);
+      if (clamped !== prev) return clamped;
+      return prev;
+    });
+  }, [initialQuantity, maxQuantity]);
 
   const handleIncrement = () => {
     if (!disabled && quantity < maxQuantity) {
@@ -49,12 +58,6 @@ export function ProductQuantitySelector({
   const handleBlur = () => {
     setQuantity((prev) => clampQuantity(prev, maxQuantity));
   };
-
-  useEffect(() => {
-    if (onQuantityChange) {
-      onQuantityChange(quantity);
-    }
-  }, [quantity, onQuantityChange]);
 
   const isAtMin = quantity <= 1;
   const isAtMax = quantity >= maxQuantity;
@@ -123,3 +126,4 @@ export function ProductQuantitySelector({
     </div>
   );
 }
+

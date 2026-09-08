@@ -35,6 +35,25 @@ export interface ProductListItem {
   created_at: string | null;
 }
 
+export interface ProductCreate {
+  name: string;
+  description?: string | null;
+  price: string;
+  cost_price?: string | null;
+  category_id: number;
+  stock_quantity?: number;
+  image_url?: string | null;
+}
+
+export interface ProductUpdate {
+  name?: string;
+  description?: string | null;
+  category_id?: number;
+  image_url?: string | null;
+  price?: string;
+  cost_price?: string | null;
+}
+
 export interface HealthResponse {
   status: string;
   message: string;
@@ -273,6 +292,126 @@ export interface PaystackTransactionVerification {
   pos_transaction_data: Record<string, unknown> | null;
   source: Record<string, unknown> | null;
   fees_breakdown: Record<string, unknown> | null;
+}
+
+// Dashboard types
+export interface KPISummary {
+  total_revenue: string;
+  total_orders: number;
+  completed_orders: number;
+  total_refunds: string;
+  net_revenue: string;
+  total_expenses: string;
+  profit_proxy: string;
+  avg_order_value: string;
+}
+
+export interface TimeSeriesPoint {
+  period: string;
+  value: string;
+  count: number;
+}
+
+export interface SalesTimeSeries {
+  daily: TimeSeriesPoint[];
+  weekly: TimeSeriesPoint[];
+  monthly: TimeSeriesPoint[];
+}
+
+export interface TopProduct {
+  product_id: number;
+  product_name: string;
+  category_name: string;
+  total_quantity_sold: number;
+  total_revenue: string;
+  order_count: number;
+}
+
+export interface CategoryPerformance {
+  category_id: number;
+  category_name: string;
+  total_revenue: string;
+  total_quantity: number;
+  order_count: number;
+}
+
+export interface InventorySnapshot {
+  product_id: number;
+  product_name: string;
+  category_name: string | null;
+  stock_quantity: number;
+  selling_price: string;
+  cost_price: string | null;
+  retail_value: string;
+  cost_value: string | null;
+}
+
+export interface ExpenseSummary {
+  by_category: Record<string, string>;
+  total: string;
+  period_start: string | null;
+  period_end: string | null;
+}
+
+export interface OrderStatusDistribution {
+  status: string;
+  count: number;
+  total_amount: string;
+}
+
+export interface PaymentMethodDistribution {
+  method: string;
+  count: number;
+  total_amount: string;
+  success_rate: number;
+}
+
+export interface GrossProfit {
+  net_revenue: string;
+  cogs: string;
+  gross_profit: string;
+  gross_margin_percent: number;
+}
+
+export interface DashboardResponse {
+  kpis: KPISummary;
+  sales_timeseries: SalesTimeSeries;
+  top_products: TopProduct[];
+  category_performance: CategoryPerformance[];
+  inventory_snapshot: InventorySnapshot[];
+  expense_summary: ExpenseSummary;
+  order_status_distribution: OrderStatusDistribution[];
+  payment_distribution: PaymentMethodDistribution[];
+  gross_profit: GrossProfit | null;
+  generated_at: string;
+}
+
+// Expense types
+export interface Expense {
+  id: number;
+  recorded_by: number;
+  description: string;
+  amount: string;
+  category: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface ExpenseCreate {
+  description: string;
+  amount: string;
+  category: string;
+}
+
+// Delivery fee types
+export interface DeliveryFeeRead {
+  id: number;
+  fee_amount: string;
+  is_active: boolean;
+}
+
+export interface DeliveryFeeUpdate {
+  fee_amount: string;
 }
 
 // Auth types
