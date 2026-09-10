@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefdf8;
-  --foreground: #1f1f1f;
-  --cream-50: #fefdf8;
+  --background: #fffaf3;
+  --foreground: #254a3d;
+  --muted: #66736b;
+  --line: #e7e0d4;
+  --card: #ffffff;
+  --cream-50: #fffaf3;
   --cream-100: #fdfbf3;
   --cream-200: #f9f5e1;
   --cream-300: #f3edc8;
@@ -13,6 +16,18 @@
   --cream-700: #8f8544;
   --cream-800: #736b3a;
   --cream-900: #5e5632;
+  --green-50: #eef8ea;
+  --green-100: #dceccd;
+  --green-200: #bedca4;
+  --green-300: #9ac86e;
+  --green-600: #6ba74e;
+  --green-700: #477a35;
+  --green-800: #264d2b;
+  --orange-500: #f28b62;
+  --pink-500: #e99ca0;
+  --charcoal: #27342b;
+  --shadow-soft: 0 16px 50px rgba(39, 52, 43, 0.08);
+  --shadow-card: 0 12px 30px rgba(82, 94, 67, 0.1);
 }
 
 @theme inline {
@@ -25,7 +40,6 @@
   --color-cream-400: var(--cream-400);
   --color-cream-500: var(--cream-500);
   --color-cream-600: var(--cream-600);
-  --color-cream-600: var(--cream-600);
   --color-cream-700: var(--cream-700);
   --color-cream-800: var(--cream-800);
   --color-cream-900: var(--cream-900);
@@ -36,6 +50,55 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#e7e0d4 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,1), transparent 100%);
+  opacity: 0.45;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+main {
+  background: var(--cream-50);
+}
+
+.site-shell {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.kiddies-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .kiddies-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 @keyframes fade-in-up {

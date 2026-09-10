@@ -31,7 +31,7 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
       title: 'Quality Products',
       description: 'Carefully selected',
       icon: (
-        <svg className="h-5 w-5 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6.293-3.293a5.968 5.968 0 010 8.408l-2.827 2.827a3 3 0 01-4.243-4.243l2.827-2.827a5.968 5.968 0 018.408 0z" />
         </svg>
       ),
@@ -41,7 +41,7 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
       title: 'Wide Variety',
       description: 'For every need',
       icon: (
-        <svg className="h-5 w-5 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
         </svg>
       ),
@@ -51,8 +51,8 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
       title: 'Fast Delivery',
       description: 'Across Lagos',
       icon: (
-        <svg className="h-5 w-5 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16l-4-4 4-4m0 0l4 4-4 4m0-10v10m-14v2h14v-2M7 32h10a2 2 0 002-2V18h-5v12zm5-15h2m0 4h2m0 4h2m-5-10v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h12l3 3h4a2 2 0 012 2v5a2 2 0 01-2 2H8a2 2 0 01-2-2V7zM7 19h.01M17 19h.01" />
         </svg>
       ),
     },
@@ -61,7 +61,7 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
       title: 'Safe & Secure',
       description: '100% secure payment',
       icon: (
-        <svg className="h-5 w-5 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm0 0v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
         </svg>
       ),
@@ -69,42 +69,29 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
   ];
 
   return (
-    <section className="py-12 bg-cream-50 overflow-x-auto scrollbar-hide">
+    <section className="bg-white py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-            Why Choose Twelve09?
-          </h2>
-          <p className="text-cream-600 text-sm">
-            We're committed to your child's safety and happiness
-          </p>
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-green-800">Our promise</span>
+            <h2 className="mt-4 text-3xl font-black tracking-tight text-charcoal sm:text-4xl">Why Choose Twelve’09?</h2>
+          </div>
+          <p className="max-w-md text-sm font-bold text-cream-700">We’re committed to quality play, thoughtful discovery, and happy family shopping.</p>
         </div>
 
-        <div className="flex items-center justify-between overflow-x-auto scrollbar-hide">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-            {benefits.map((benefit) => (
-              <article
-                key={benefit.id}
-                className="group flex-1 flex flex-col items-center text-center rounded-xl bg-white p-5 pb-6 shadow-sm hover:shadow-md transition-shadow duration-200 border border-cream-200"
-              >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-green-100">
-                  {benefit.icon}
-                </div>
-
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {benefit.title}
-                </h3>
-
-                <p className="text-cream-700 text-sm line-clamp-2">
-                  {benefit.description}
-                </p>
-              </article>
-            ))}
-          </div>
-
-          <div className="hidden sm:block text-cream-600 text-sm">
-            All backed by our quality guarantee
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((benefit) => (
+            <article
+              key={benefit.id}
+              className="group flex min-h-[180px] flex-col items-center justify-center rounded-[1.75rem] border border-cream-200 bg-cream-50 p-6 text-center transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)]"
+            >
+              <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-green-800 shadow-sm transition group-hover:bg-green-700 group-hover:text-white">
+                {benefit.icon}
+              </span>
+              <h3 className="text-lg font-black tracking-tight text-charcoal">{benefit.title}</h3>
+              <p className="mt-2 text-sm font-medium text-cream-700">{benefit.description}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

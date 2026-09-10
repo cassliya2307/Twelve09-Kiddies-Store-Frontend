@@ -1,6 +1,5 @@
 import type { Category } from '@/types/api';
 
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { CartContent } from '@/components/cart/CartContent';
@@ -25,7 +24,6 @@ export default async function CartPage() {
 
   return (
     <div>
-      <Header />
       <CartContent categories={categories} />
       <MobileBottomNav />
       <Footer />

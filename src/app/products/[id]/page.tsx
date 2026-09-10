@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { ProductDetails } from '@/components/product/ProductDetails';
@@ -94,7 +93,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         Skip to main content
       </a>
 
-      <Header />
 
       <main id="main-content" className="flex-1">
         {productError && !product && (

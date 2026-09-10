@@ -1,6 +1,5 @@
 ﻿import type { Category, ProductListItem } from '@/types/api';
 
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
@@ -43,7 +42,6 @@ export default async function ShopPage({
 
   return (
     <div>
-      <Header />
       <CategorySection categories={categories} />
       {search && !productsError ? (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6">

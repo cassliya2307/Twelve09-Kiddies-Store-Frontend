@@ -1,4 +1,3 @@
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { OrderConfirmationContent } from './OrderConfirmationContent';
@@ -30,7 +29,6 @@ export default async function OrderConfirmationPage() {
         Skip to main content
       </a>
 
-      <Header />
 
       <main id="main-content" className="flex-1">
         {categoriesError && (

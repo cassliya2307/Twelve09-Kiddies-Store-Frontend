@@ -6,7 +6,6 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
-import { Header } from '@/components/layout/Header';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -245,7 +244,6 @@ export default function OrderDetailsPage() {
   if (authLoading || (!isAuthenticated && !notFound && !error)) {
     return (
       <>
-        <Header />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
           <Skeleton variant="text" width="40%" height="32px" className="mb-6" />
           <div className="bg-white rounded-2xl border border-cream-200 p-6 space-y-4">
@@ -263,7 +261,6 @@ export default function OrderDetailsPage() {
 
   return (
     <>
-      <Header />
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
         <nav className="mb-4" aria-label="Breadcrumb">
           <Link href="/orders" className="text-sm text-green-600 hover:text-green-700">

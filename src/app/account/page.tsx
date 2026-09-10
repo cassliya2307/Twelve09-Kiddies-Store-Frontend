@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { Header } from '@/components/layout/Header';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -23,7 +22,6 @@ export default function AccountPage() {
   if (isLoading) {
     return (
       <>
-        <Header />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
           <Skeleton variant="text" width="40%" height="32px" className="mb-6" />
           <div className="bg-white rounded-2xl border border-cream-200 p-6 sm:p-8 space-y-5">
@@ -40,7 +38,6 @@ export default function AccountPage() {
   if (!user) {
     return (
       <>
-        <Header />
         <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
           <div className="bg-white rounded-2xl border border-cream-200 p-8 text-center" role="status" aria-live="polite">
             <p className="text-cream-600">Redirecting to sign in…</p>
@@ -53,7 +50,6 @@ export default function AccountPage() {
 
   return (
     <>
-      <Header />
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Account</h1>
         <p className="mt-1 text-cream-600">Manage your details and review your orders.</p>

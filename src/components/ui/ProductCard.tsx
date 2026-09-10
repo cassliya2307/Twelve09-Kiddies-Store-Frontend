@@ -12,15 +12,16 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addToCart, getCartQuantity } = useCart();
+  const { addToCart, removeFromCart, getCartQuantity } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
 
-  const price = Number(product.price).toLocaleString('en-NG', {
+  const numericPrice = Number(product.price || 0);
+  const price = new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: 'NGN',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  });
+  }).format(numericPrice).replace('NGN', '₦');
 
   const isLowStock = product.stock_quantity > 0 && product.stock_quantity <= 5;
   const isOutOfStock = product.stock_quantity === 0;
@@ -32,7 +33,12 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isUnavailable) {
+  
+    console.log("Cart button clicked for:", product.name);
+  
+    if (isInCartResult) {
+      removeFromCart(product.id);
+    } else {
       addToCart(product, 1);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 2000);
@@ -40,50 +46,75 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <article className="group relative bg-white rounded-2xl border border-cream-200 hover:border-green-300 hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <article className="group relative overflow-hidden rounded-[1.75rem] border border-cream-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)]">
       <Link href={`/products/${product.id}`} className="block" aria-label={`View ${product.name}`}>
-        <div className="relative aspect-square bg-cream-50 overflow-hidden">
+        <div className="relative aspect-square overflow-hidden bg-cream-50">
           <ProductImage
             src={product.image_url}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
           {(isLowStock || isOutOfStock) && (
-            <div className="absolute top-3 left-3 z-10">
+            <div className="absolute left-3 top-3 z-10">
               <Badge variant={isOutOfStock ? 'danger' : 'warning'} size="sm">
                 {isOutOfStock ? 'Out of Stock' : 'Low Stock'}
               </Badge>
             </div>
           )}
           {!product.is_active && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
               <Badge variant="danger">Unavailable</Badge>
             </div>
           )}
         </div>
       </Link>
 
-      <div className="p-4 sm:p-5">
-        <h3 className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2 mb-2">
-          {product.name}
-        </h3>
-        <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-green-600">{price}</span>
+      <div className="p-5">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-green-800">Play pick</span>
+            </div>
+            <h3 className="line-clamp-2 text-base font-black leading-6 tracking-tight text-charcoal transition group-hover:text-green-800">
+              {product.name}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-2">
+            <span className="text-2xl font-black tracking-tight text-green-800">{price}</span>
+            <span className="flex items-center gap-1 text-amber-500" aria-label="Rated 4.8 out of 5">
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 1.5l2.8 6 6.2.9-4.5 4.4 1.1 6.2-6.1-3.2-6.1 3.2 1.1-6.2-4.5-4.4 6.2-.9L10 1.5z" />
+              </svg>
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 1.5l2.8 6 6.2.9-4.5 4.4 1.1 6.2-6.1-3.2-6.1 3.2 1.1-6.2-4.5-4.4 6.2-.9L10 1.5z" />
+              </svg>
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 1.5l2.8 6 6.2.9-4.5 4.4 1.1 6.2-6.1-3.2-6.1 3.2 1.1-6.2-4.5-4.4 6.2-.9L10 1.5z" />
+              </svg>
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 1.5l2.8 6 6.2.9-4.5 4.4 1.1 6.2-6.1-3.2-6.1 3.2 1.1-6.2-4.5-4.4 6.2-.9L10 1.5z" />
+              </svg>
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 1.5l2.8 6 6.2.9-4.5 4.4 1.1 6.2-6.1-3.2-6.1 3.2 1.1-6.2-4.5-4.4 6.2-.9L10 1.5z" />
+              </svg>
+            </span>
+          </div>
           <button
             onClick={handleAddToCart}
-            disabled={isUnavailable || addedToCart}
-            className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cream-100 text-green-600 hover:bg-green-100 hover:text-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-cream-100 disabled:hover:text-green-600"
-            aria-label={isUnavailable ? `${product.name} is unavailable` : isInCartResult ? `Update quantity for ${product.name}` : `Add ${product.name} to cart`}
-            aria-disabled={isUnavailable || addedToCart}
+            disabled={addedToCart}
+            className="relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-700 text-white shadow-sm transition hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={isUnavailable ? `${product.name} is unavailable` : isInCartResult ? `Remove ${product.name} from cart` : `Add ${product.name} to cart`}
+            aria-disabled={addedToCart}
           >
-            {isInCartResult && !addedToCart ? (
-              <span className="text-sm font-medium text-green-700">✓ In Cart ({inCartQuantity})</span>
+            {isInCartResult ? (
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" /></svg>
             ) : addedToCart ? (
-              <span className="text-sm font-medium text-green-700">Added!</span>
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
             ) : (
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             )}
           </button>
         </div>

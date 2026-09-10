@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
-import { Header } from '@/components/layout/Header';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -77,7 +76,6 @@ export default function OrdersPage() {
   if (authLoading || (!isAuthenticated && !error)) {
     return (
       <>
-        <Header />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
           <Skeleton variant="text" width="30%" height="32px" className="mb-6" />
           <div className="space-y-4">
@@ -99,7 +97,6 @@ export default function OrdersPage() {
 
   return (
     <>
-      <Header />
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Orders</h1>
         <p className="mt-1 text-cream-600">Review your order history and track each purchase.</p>

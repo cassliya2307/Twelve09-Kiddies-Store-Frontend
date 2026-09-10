@@ -41,14 +41,15 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
     case 'ADD_ITEM': {
       const { product, quantity } = action.payload;
-      const existingIndex = state.items.findIndex((item) => item.productId === product.id);
+      const normalizedProductId = Number(product.id);
+      const existingIndex = state.items.findIndex((item) => Number(item.productId) === normalizedProductId);
 
       if (existingIndex >= 0) {
         const newItems = [...state.items];
         const maxQuantity = getMaxQuantity(product);
         const newQuantity = Math.min(newItems[existingIndex].quantity + quantity, maxQuantity);
         if (newQuantity <= 0) {
-          return { ...state, items: state.items.filter((item) => item.productId !== product.id) };
+          return { ...state, items: state.items.filter((item) => Number(item.productId) !== normalizedProductId) };
         }
         newItems[existingIndex] = { ...newItems[existingIndex], product, unitPrice: product.price, quantity: newQuantity };
         return { ...state, items: newItems };
@@ -59,7 +60,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       if (clampedQuantity <= 0) return state;
 
       const newItem: CartItem = {
-        productId: product.id,
+        productId: normalizedProductId,
         product,
         quantity: clampedQuantity,
         unitPrice: product.price,

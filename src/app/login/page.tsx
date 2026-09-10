@@ -1,5 +1,4 @@
 ﻿import { Suspense } from 'react';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { LoginContent } from './LoginContent';
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
-      <Header />
       <main id="main-content">
         <Suspense fallback={<div className="mx-auto max-w-md px-4 py-16 sm:py-24 text-center text-cream-600">Loading...</div>}>
           <LoginContent />

@@ -1,4 +1,3 @@
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import type { Metadata } from 'next';
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div>
-      <Header />
       <div className="min-h-screen bg-cream-50 font-sans antialiased flex flex-col">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white">
           Skip to main content

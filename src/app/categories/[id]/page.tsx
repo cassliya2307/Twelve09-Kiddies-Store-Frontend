@@ -1,5 +1,4 @@
 ﻿import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getCategories, getProducts } from '@/lib/api';
 import type { Category, ProductListItem } from '@/types/api';
@@ -23,7 +22,6 @@ export default async function CategoryPage({
   if (isNaN(categoryId)) {
     return (
       <div>
-        <Header />
         <div className="min-h-screen bg-cream-50 font-sans antialiased flex flex-col">
           <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white">
             Skip to main content
@@ -70,7 +68,6 @@ export default async function CategoryPage({
   if (error) {
     return (
       <div>
-        <Header />
         <div className="min-h-screen bg-cream-50 font-sans antialiased flex flex-col">
           <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white">
             Skip to main content
@@ -101,7 +98,6 @@ export default async function CategoryPage({
   if (products.length === 0) {
     return (
       <div>
-        <Header />
         <div className="min-h-screen bg-cream-50 font-sans antialiased flex flex-col">
           <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white">
             Skip to main content
@@ -129,7 +125,6 @@ export default async function CategoryPage({
 
   return (
     <div>
-      <Header />
       <div className="min-h-screen bg-cream-50 font-sans antialiased flex flex-col">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white">
           Skip to main content

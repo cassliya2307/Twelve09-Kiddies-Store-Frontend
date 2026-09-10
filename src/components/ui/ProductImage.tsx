@@ -9,21 +9,38 @@ interface ProductImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 's
   className?: string;
 }
 
+const PRODUCT_FALLBACKS = [
+  '/twelve09-products/gfg.jpeg',
+  '/twelve09-products/hij.jpeg',
+  '/twelve09-products/jj.jpeg',
+  '/twelve09-products/kjjb.jpeg',
+  '/twelve09-products/kll.jpeg',
+  '/twelve09-products/nn.jpeg',
+  '/twelve09-products/ooo.jpeg',
+  '/twelve09-products/pp.jpeg',
+  '/twelve09-products/uu.jpeg',
+  '/twelve09-products/WhatsApp%20Image%202026-08-27%20at%2007.00.29.jpeg',
+];
+
 export const ProductImage = forwardRef<HTMLImageElement, ProductImageProps>(
   ({ src, alt, fallback, className = '', ...props }, ref) => {
     const [imageError, setImageError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [fallbackIndex, setFallbackIndex] = useState(0);
 
     const handleError = () => {
       setImageError(true);
       setIsLoading(false);
+      setFallbackIndex((current) => (current + 1) % PRODUCT_FALLBACKS.length);
     };
 
     const handleLoad = () => {
       setIsLoading(false);
     };
 
-    const imageSrc = imageError || !src ? fallback || '/placeholder-product.svg' : src;
+    const imageSrc = imageError || !src
+      ? fallback || PRODUCT_FALLBACKS[fallbackIndex % PRODUCT_FALLBACKS.length]
+      : src;
 
     return (
       <div className="relative overflow-hidden bg-cream-100" {...props}>

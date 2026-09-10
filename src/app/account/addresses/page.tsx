@@ -5,7 +5,6 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { Header } from '@/components/layout/Header';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -296,7 +295,6 @@ export default function AddressesPage() {
   if (authLoading || (loading && isAuthenticated)) {
     return (
       <>
-        <Header />
         <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
           <Skeleton variant="text" width="40%" height="32px" className="mb-2" />
           <Skeleton variant="text" width="55%" height="16px" className="mb-6" />
@@ -322,7 +320,6 @@ export default function AddressesPage() {
   if (!isAuthenticated) {
     return (
       <>
-        <Header />
         <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
           <div className="bg-white rounded-2xl border border-cream-200 p-8 text-center" role="status" aria-live="polite">
             <p className="text-cream-600">Redirecting to sign in…</p>
@@ -335,7 +332,6 @@ export default function AddressesPage() {
 
   return (
     <>
-      <Header />
       <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
         {/* Breadcrumb & header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

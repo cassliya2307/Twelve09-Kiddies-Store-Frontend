@@ -566,8 +566,8 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
                           </svg>
                         )}
                         {method === 'PAYSTACK' && (
-                          <svg className="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8zm-1.25-6.75c-.63 0-1.14.52-1.22 1.15h-2.06c.06-.91.65-1.65 1.56-1.65.62 0 1.12.5 1.15 1.12.04.7-.52 1.25-1.2 1.25-.48 0-.89-.37-1-1H9c-.83 0-1.5.68-1.5 1.5S8.17 12 9 12c.87 0 1.56-.58 1.77-1.33l2.72 2.7c-.83.6-1.9.94-3 .47-1.1-.48-1.7-1.52-1.7-2.66 0-.76.5-1.41 1.23-1.65C9.24 10.44 8.01 9 6.48 9c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.2 0 3.93-1.35 4.54-3.19.21.56.63.98 1.2.98h.02c.94 0 1.72-.94 1.72-2.1s-.77-2.09-1.73-2.16z"/>
+                          <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                           </svg>
                         )}
                         {method === 'CARD' && (

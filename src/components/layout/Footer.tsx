@@ -43,13 +43,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <Link href="/" className="flex items-center gap-2" aria-label="Twelve09 Kiddies Store Home">
-              <svg className="h-10 w-10 text-green-600" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="16" cy="16" r="14" stroke="#16A34A" strokeWidth="2"/>
-                <path d="M16 8C11.5817 8 8 11.5817 8 16C8 20.4183 11.5817 24 16 24C20.4183 24 24 20.4183 24 16C24 11.5817 20.4183 8 16 8Z" stroke="#16A34A" strokeWidth="2"/>
-                <circle cx="16" cy="16" r="4" fill="#16A34A"/>
-              </svg>
-              <span className="text-2xl font-bold text-gray-900">Twelve09</span>
+            <Link href="/" className="flex items-center gap-2" aria-label="Twelve’09 Kiddies Store Home">
+              <span className="flex items-center justify-center">
+                <img src="/twelve09-logo-removebg-preview.png" alt="Twelve’09 Kiddies Store" className="h-20 w-auto object-contain" />
+              </span>
             </Link>
             <p className="text-cream-600 text-sm max-w-xs">
               Bringing joy to every child's world with carefully curated toys, games, and educational products.
@@ -59,7 +56,7 @@ export function Footer() {
                 <a
                   key={social.name}
                   href={social.href}
-                  className="text-cream-400 hover:text-green-600 transition-colors"
+                  className="text-cream-600 hover:text-green-600 transition-colors"
                   aria-label={social.name}>
                   {social.icon}
                 </a>
@@ -69,7 +66,7 @@ export function Footer() {
 
           <div className="mt-12 xl:mt-0 xl:col-span-2 grid grid-cols-2 gap-8 xl:grid-cols-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Shop</h3>
+              <h3 className="text-sm font-black text-green-800 uppercase tracking-[0.14em]">Shop</h3>
               <ul className="mt-4 space-y-3">
                 {footerLinks.shop.map((link) => (
                   <li key={link.name}>
@@ -81,7 +78,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Support</h3>
+              <h3 className="text-sm font-black text-green-800 uppercase tracking-[0.14em]">Support</h3>
               <ul className="mt-4 space-y-3">
                 {footerLinks.support.map((link) => (
                   <li key={link.name}>
@@ -93,7 +90,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Company</h3>
+              <h3 className="text-sm font-black text-green-800 uppercase tracking-[0.14em]">Company</h3>
               <ul className="mt-4 space-y-3">
                 {footerLinks.company.map((link) => (
                   <li key={link.name}>
@@ -105,7 +102,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Legal</h3>
+              <h3 className="text-sm font-black text-green-800 uppercase tracking-[0.14em]">Legal</h3>
               <ul className="mt-4 space-y-3">
                 {footerLinks.legal.map((link) => (
                   <li key={link.name}>
@@ -120,7 +117,7 @@ export function Footer() {
 
           <div className="mt-12 border-t border-cream-200 pt-8">
             <p className="text-sm text-cream-500 text-center">
-              &copy; {new Date().getFullYear()} Twelve09 Kiddies Store. All rights reserved.
+              &copy; {new Date().getFullYear()} Twelve’09 Kiddies Store. All rights reserved.
             </p>
           </div>
         </div>
