@@ -41,22 +41,22 @@ export function Footer() {
   return (
     <footer className="bg-cream-50 border-t border-cream-200">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <Link href="/" className="flex items-center gap-2" aria-label="Twelve’09 Kiddies Store Home">
               <span className="flex items-center justify-center">
-                <img src="/twelve09-logo-removebg-preview.png" alt="Twelve’09 Kiddies Store" className="h-20 w-auto object-contain" />
+                <img src="/twelve09-logo-removebg-preview.png" alt="Twelve’09 Kiddies Store" className="h-16 w-auto object-contain sm:h-20" />
               </span>
             </Link>
             <p className="text-cream-600 text-sm max-w-xs">
               Bringing joy to every child's world with carefully curated toys, games, and educational products.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
-                  className="text-cream-600 hover:text-green-600 transition-colors"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream-200 text-cream-600 hover:text-green-600 transition-colors"
                   aria-label={social.name}>
                   {social.icon}
                 </a>
@@ -64,7 +64,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-12 xl:mt-0 xl:col-span-2 grid grid-cols-2 gap-8 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-8 md:col-span-2 xl:col-span-2 xl:grid-cols-4">
             <div>
               <h3 className="text-sm font-black text-green-800 uppercase tracking-[0.14em]">Shop</h3>
               <ul className="mt-4 space-y-3">
@@ -115,7 +115,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-12 border-t border-cream-200 pt-8">
+          <div className="md:col-span-3 xl:col-span-3 mt-12 border-t border-cream-200 pt-8">
             <p className="text-sm text-cream-500 text-center">
               &copy; {new Date().getFullYear()} Twelve’09 Kiddies Store. All rights reserved.
             </p>

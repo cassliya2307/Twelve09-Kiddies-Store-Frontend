@@ -145,7 +145,7 @@ export default async function CategoryPage({
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {products.map((product) => (
                   <div
                     key={product.id}
@@ -158,13 +158,13 @@ export default async function CategoryPage({
                         className="w-full h-40 object-cover rounded-t-xl mb-3"
                       />
                     )}
-                    <h3 className="font-medium text-gray-900 line-clamp-2">
+                    <h3 className="font-medium text-gray-900 line-clamp-2 break-words">
                       {product.name}
                     </h3>
-                    <p className="text-cream-600 text-sm line-clamp-2">
+                    <p className="text-cream-600 text-sm line-clamp-2 break-words">
                       {product.description || ''}
                     </p>
-                    <div className="mt-2 flex items-center justify-between">
+                    <div className="mt-2 flex items-center justify-between gap-2">
                       <span className="text-green-600 font-medium">{product.price}</span>
                       <span className="text-cream-500 text-xs">
                         {product.stock_quantity} in stock

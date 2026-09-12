@@ -49,9 +49,9 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
         <div className="space-y-4">
-          <div className="relative aspect-[4/5] rounded-2xl bg-cream-50 overflow-hidden">
+          <div className="relative aspect-[4/5] max-h-[560px] rounded-2xl bg-cream-50 overflow-hidden">
             <ProductImage
               src={product.image_url}
               alt={product.name}
@@ -108,7 +108,7 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
             </Link>
           )}
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{product.name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">{product.name}</h1>
 
           <div className="flex flex-wrap items-center gap-4">
             <span className="text-3xl font-bold text-green-600">{price}</span>
@@ -117,7 +117,7 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
 
           {product.description && (
             <div className="prose prose-cream max-w-none">
-              <p className="text-cream-600 whitespace-pre-line">{product.description}</p>
+              <p className="text-cream-600 whitespace-pre-line break-words">{product.description}</p>
             </div>
           )}
 
@@ -130,7 +130,7 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-cream-200">
+          <div className="flex flex-col gap-4 pt-4 border-t border-cream-200 sm:flex-row">
             <Button
               variant="primary"
               size="lg"
@@ -143,7 +143,7 @@ export function ProductDetails({ product, category }: ProductDetailsProps) {
             </Button>
             <Link
               href="/cart"
-              className="hidden sm:inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-xl border border-cream-200 bg-white text-gray-700 hover:bg-cream-50 hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-xl border border-cream-200 bg-white text-gray-700 hover:bg-cream-50 hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors sm:inline-flex"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />

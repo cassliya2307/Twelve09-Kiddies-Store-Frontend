@@ -51,7 +51,7 @@ export function LoginContent() {
   };
 
   return (
-    <div className="mx-auto max-w-md px-4 py-16 sm:py-24">
+    <div className="mx-auto max-w-md px-4 py-12 sm:px-6 sm:py-16 md:py-24">
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2" aria-label="Twelve09 Kiddies Store Home">
           <svg className="h-10 w-10 text-green-600" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -78,11 +78,11 @@ export function CartContent({ categories }: CartContentProps) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-cream-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full" role="table">
+              <table className="min-w-[620px] w-full" role="table">
                 <thead>
                   <tr className="bg-cream-50 border-b border-cream-200">
                     <th className="px-4 py-3 text-left text-sm font-medium text-cream-600">Product</th>

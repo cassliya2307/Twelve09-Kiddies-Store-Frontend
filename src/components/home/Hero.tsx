@@ -19,26 +19,26 @@ export function Hero() {
           <div className="absolute bottom-[20%] left-[35%] z-0 opacity-40 text-[2rem]" aria-hidden="true">✨</div>
           <div className="absolute top-[45%] right-[55%] z-0 opacity-20 text-[3rem]" aria-hidden="true">⭐</div>
 
-          <div className="max-w-2xl">
+          <div className="max-w-2xl px-1 sm:px-0">
             <div className="mt-7">
-              <h1 className="max-w-[700px] font-black leading-[0.92] tracking-[-0.035em] text-[clamp(3.2rem,5vw,4.5rem)] text-charcoal">
+              <h1 className="max-w-[700px] font-black leading-[0.95] tracking-[-0.035em] text-[clamp(2.4rem,11vw,4.5rem)] text-charcoal">
                 <span className="block text-[#284d2b]">Everything</span>
                 <span className="block text-[#27342b]">your child needs,</span>
                 <span className="block text-[#f28b62]">all in one place!</span>
               </h1>
             </div>
 
-            <p className="mt-5 max-w-[620px] text-lg font-medium leading-8 text-cream-700">
+            <p className="mt-5 max-w-[620px] text-base font-medium leading-7 text-cream-700 sm:text-lg sm:leading-8">
               Quality • Variety • Care
             </p>
 
-            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row">
-              <Link href="/shop">
+            <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-start">
+              <Link href="/shop" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full sm:w-auto rounded-full bg-green-700 px-8 py-3 text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-900/20 transition hover:bg-green-800">
                   Shop New Arrivals
                 </Button>
               </Link>
-              <Link href="/shop" className="inline-flex items-center gap-2 rounded-full border border-green-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-green-800 transition hover:bg-green-50">
+              <Link href="/shop" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-green-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-green-800 transition hover:bg-green-50 sm:w-auto">
                 Shop All
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
