@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { useAdminGuard } from '@/hooks/useAdminGuard';
-import { getProducts, getCategories, createProduct, updateProduct, activateProduct, deactivateProduct } from '@/lib/api';
+import { getProducts, getCategories, createProduct, updateProduct, activateProduct, deactivateProduct, uploadProductImage } from '@/lib/api';
 import type { ProductListItem, Category } from '@/types/api';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -51,8 +51,20 @@ export default function AdminProductsPage() {
   const [formData, setFormData] = useState<ProductFormData>(emptyForm);
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (selectedImagePreview?.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImagePreview);
+      }
+    };
+  }, [selectedImagePreview]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search.trim()), 300);
@@ -89,6 +101,9 @@ export default function AdminProductsPage() {
 
   const openCreate = () => {
     setEditing(null);
+    setSelectedImage(null);
+    setSelectedImagePreview(null);
+    setUploadError(null);
     setFormData(emptyForm);
     setFormError(null);
     setShowForm(true);
@@ -96,6 +111,9 @@ export default function AdminProductsPage() {
 
   const openEdit = (p: ProductListItem) => {
     setEditing(p);
+    setSelectedImage(null);
+    setSelectedImagePreview(null);
+    setUploadError(null);
     setFormData({
       name: p.name,
       description: p.description ?? '',
@@ -107,6 +125,48 @@ export default function AdminProductsPage() {
     });
     setFormError(null);
     setShowForm(true);
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) {
+      setSelectedImage(null);
+      setSelectedImagePreview(null);
+      return;
+    }
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowed.includes(file.type)) {
+      setUploadError('Unsupported image type. Please choose JPG, JPEG, PNG, WEBP, or GIF.');
+      setSelectedImage(null);
+      setSelectedImagePreview(null);
+      return;
+    }
+
+    if (selectedImagePreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(selectedImagePreview);
+    }
+
+    setUploadError(null);
+    setSelectedImage(file);
+    setSelectedImagePreview(URL.createObjectURL(file));
+  };
+
+  const uploadSelectedImage = async (productId: number) => {
+    if (!selectedImage) return;
+
+    setUploading(true);
+    setUploadError(null);
+    try {
+      const response = await uploadProductImage(productId, selectedImage);
+      setFormData({ ...formData, image_url: response.image_url });
+      setSuccess('Image uploaded successfully');
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Image upload failed');
+      setSuccess('Product created, but image upload failed. You can retry this image from the product editor.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const validate = (data: ProductFormData, isEdit: boolean): string | null => {
@@ -137,6 +197,7 @@ export default function AdminProductsPage() {
     }
     setSubmitting(true);
     setFormError(null);
+    setUploadError(null);
     try {
       if (isEdit && editing) {
         const payload: Record<string, unknown> = {
@@ -147,10 +208,34 @@ export default function AdminProductsPage() {
           image_url: formData.image_url.trim() || null,
         };
         if (formData.cost_price.trim()) payload.cost_price = formData.cost_price.trim();
-        await updateProduct(editing.id, payload as never);
+
+        const updatedProduct = await updateProduct(editing.id, payload as never);
         setSuccess('Product updated successfully');
+
+        if (selectedImage) {
+          try {
+            setUploading(true);
+            const response = await uploadProductImage(editing.id, selectedImage);
+            setFormData({ ...formData, image_url: response.image_url });
+            setSuccess('Product updated and image uploaded successfully');
+            setSelectedImage(null);
+            setSelectedImagePreview(null);
+            await fetchData();
+          } catch (uploadErr) {
+            const msg = uploadErr instanceof Error ? uploadErr.message : 'Image upload failed';
+            setUploadError(msg);
+            setError(`Product updated, but image upload failed: ${msg}. You can retry the image from the product editor.`);
+            setSuccess('Product updated, but image upload failed. Please try again.');
+          } finally {
+            setUploading(false);
+          }
+        }
+
+        setShowForm(false);
+        setEditing(null);
+        await fetchData();
       } else {
-        await createProduct({
+        const createdProduct = await createProduct({
           name: formData.name.trim(),
           description: formData.description.trim() || null,
           category_id: Number(formData.category_id),
@@ -159,11 +244,29 @@ export default function AdminProductsPage() {
           stock_quantity: Number(formData.stock_quantity),
           image_url: formData.image_url.trim() || null,
         });
+
         setSuccess('Product created successfully');
+
+        if (selectedImage) {
+          try {
+            setUploading(true);
+            const response = await uploadProductImage(createdProduct.id, selectedImage);
+            setFormData({ ...formData, image_url: response.image_url });
+            setSuccess('Product created and image uploaded successfully');
+          } catch (uploadErr) {
+            const msg = uploadErr instanceof Error ? uploadErr.message : 'Image upload failed';
+            setUploadError(msg);
+            setError(`Product created, but image upload failed: ${msg}. You can retry the image from the product editor.`);
+            setSuccess('Product created, but image upload failed. Please retry the image upload from the product editor.');
+          } finally {
+            setUploading(false);
+          }
+        }
+
+        setShowForm(false);
+        setEditing(null);
+        await fetchData();
       }
-      setShowForm(false);
-      setEditing(null);
-      await fetchData();
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Failed to save product');
     } finally {
@@ -441,18 +544,58 @@ export default function AdminProductsPage() {
                     </div>
                   )}
                 </div>
-                <div>
-                  <label htmlFor="prod-image" className="block text-sm font-medium text-gray-700 mb-1">
-                    Image URL
-                  </label>
-                  <input
-                    id="prod-image"
-                    type="url"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-4 py-2.5 rounded-xl border border-cream-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="prod-image" className="block text-sm font-medium text-gray-700 mb-1">
+                      Product Image
+                    </label>
+                    {(editing || formData.image_url) && (
+                      <span className="text-xs font-medium text-cream-600">
+                        {editing ? 'Replace Image' : 'Image URL'}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <label
+                      htmlFor="prod-image"
+                      className="inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-dashed border-green-700 bg-green-50 px-4 py-3 text-sm font-bold text-green-800 transition hover:bg-green-100 focus-within:ring-2 focus-within:ring-green-500"
+                    >
+                      <span>{editing ? 'Upload New Image' : 'Upload Image'}</span>
+                      <input
+                        id="prod-image"
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        onChange={handleImageSelect}
+                        className="sr-only"
+                      />
+                    </label>
+
+                    {(selectedImagePreview || formData.image_url) && (
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={selectedImagePreview || formData.image_url}
+                          alt="Product preview"
+                          className="h-16 w-16 rounded-xl border border-cream-200 object-cover bg-cream-50"
+                        />
+                        <span className="text-xs text-cream-600">
+                          {selectedImage ? selectedImage.name : 'Current image'}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {uploading && (
+                    <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-medium text-blue-700">
+                      Uploading image...
+                    </div>
+                  )}
+
+                  {uploadError && (
+                    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                      {uploadError}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-3 pt-2">

@@ -1,5 +1,11 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+export interface ProductImageUploadResponse {
+  image_url: string;
+  filename: string;
+  size_bytes: number;
+}
+
 class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
@@ -42,6 +48,29 @@ class ApiClient {
     return response.json();
   }
 
+  async upload<T>(endpoint: string, file: File): Promise<T> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers: HeadersInit = {};
+    if (this.token) {
+      (headers as Record<string, string>)['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      method: 'POST',
+      body: formData,
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ detail: 'Image upload failed' }));
+      throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
   async get<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
@@ -79,6 +108,9 @@ export const getCategories = () => api.get<Category[]>('/categories');
 export const createCategory = (data: { name: string; description?: string | null }) => api.post<Category>('/categories', data);
 
 // Products
+export const uploadProductImage = (productId: number, file: File) =>
+  api.upload<ProductImageUploadResponse>(`/products/${productId}/upload-image`, file);
+
 export interface GetProductsParams {
   skip?: number;
   limit?: number;
