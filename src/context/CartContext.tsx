@@ -31,13 +31,14 @@ type CartAction =
 const STORAGE_KEY = 'twelve09-cart-v1';
 
 function getMaxQuantity(product: Product | ProductListItem): number {
-  return product.stock_quantity ?? 0;
+  return product.stock_quantity ?? 1;
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'INIT':
-      return { ...state, items: action.payload, isInitialized: true };
+      const initResult = { ...state, items: action.payload, isInitialized: true };
+      return initResult;
 
     case 'ADD_ITEM': {
       const { product, quantity } = action.payload;
@@ -57,7 +58,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
       const maxQuantity = getMaxQuantity(product);
       const clampedQuantity = Math.min(quantity, maxQuantity);
-      if (clampedQuantity <= 0) return state;
+      if (clampedQuantity <= 0) {
+        return state;
+      }
 
       const newItem: CartItem = {
         productId: normalizedProductId,
@@ -65,7 +68,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         quantity: clampedQuantity,
         unitPrice: product.price,
       };
-      return { ...state, items: [...state.items, newItem] };
+      const newItems = [...state.items, newItem];
+      return { ...state, items: newItems };
     }
 
     case 'REMOVE_ITEM': {
@@ -208,18 +212,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
+      let parsed: any;
       if (stored) {
-        const parsed = JSON.parse(stored);
+        parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          const valid = parsed.filter(
-            (it: unknown) =>
-              typeof it === 'object' &&
-              it !== null &&
-              typeof (it as CartItem).productId === 'number' &&
-              typeof (it as CartItem).quantity === 'number' &&
-              (it as CartItem).product &&
-              typeof (it as CartItem).unitPrice === 'string'
-          );
+const valid = parsed.filter(
+              (it: unknown) =>
+                typeof it === 'object' &&
+                it !== null &&
+                typeof (it as CartItem).productId === 'number' &&
+                typeof (it as CartItem).quantity === 'number' &&
+                (it as CartItem).product &&
+                typeof (it as CartItem).unitPrice === 'string'
+            );
           dispatch({ type: 'INIT', payload: valid as CartItem[] });
         } else {
           dispatch({ type: 'INIT', payload: [] });
@@ -235,7 +240,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (state.isInitialized) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+        const itemsToStore = JSON.stringify(state.items);
+        localStorage.setItem(STORAGE_KEY, itemsToStore);
       } catch {}
     }
   }, [state.items, state.isInitialized]);

@@ -16,9 +16,13 @@ export function Header() {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { totalItems } = useCart();
+  const { totalItems, items } = useCart();
   const cartCount = totalItems || 0;
   const showBadge = cartCount > 0;
+  console.log('[CART HEADER READ]', {
+    totalItems,
+    productIds: items.map(i => i.productId)
+  });
   const { isAuthenticated, user } = useAuth();
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -74,10 +78,6 @@ export function Header() {
           </form>
 
           <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3 md:gap-5">
-            <Link href="/track-order" className="hidden text-sm font-bold text-gray-700 transition-colors hover:text-green-800 md:inline-flex" aria-label="Track Order">
-              Track Order
-            </Link>
-
             <Link href="/cart" className="group relative inline-flex items-center gap-2 rounded-full px-2 py-2 text-sm font-bold text-green-800 transition-colors duration-200 hover:bg-green-50 hover:text-green-700 sm:px-3" aria-label="Cart">
               <span className="inline-flex items-center gap-2">
                 <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
@@ -148,9 +148,6 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
-                <Link href="/track-order" className="rounded-xl px-3 py-3 text-sm font-bold text-gray-700 hover:bg-green-50 hover:text-green-800" onClick={() => setMobileMenuOpen(false)}>
-                  Track Order
-                </Link>
                 {isAuthenticated ? (
                   <Link href="/profile" className="rounded-xl px-3 py-3 text-sm font-bold text-green-800 hover:bg-green-50" onClick={() => setMobileMenuOpen(false)}>
                     Welcome, {user?.name ? user.name.split(' ')[0] : 'User'}

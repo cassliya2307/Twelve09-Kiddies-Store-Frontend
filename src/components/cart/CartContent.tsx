@@ -14,6 +14,11 @@ interface CartContentProps {
 export function CartContent({ categories }: CartContentProps) {
   const { items, subtotal, totalItems, removeFromCart, updateQuantity, clearCart, isInitialized, lastRefreshed } = useCart();
 
+  console.log('[CART UI READ]', {
+    itemCount: items.length,
+    productIds: items.map(i => i.productId)
+  });
+
   const deliveryFee = 0;
   const total = subtotal + deliveryFee;
 
