@@ -242,6 +242,16 @@ export interface PaystackInitializeResponse {
   reference: string;
 }
 
+export interface PaystackVerifyRequest {
+  reference: string;
+}
+
+export interface PaystackVerifyResponse {
+  status: string;
+  result?: string;
+  reason?: string;
+}
+
 export interface PaystackTransactionVerification {
   id: number;
   domain: string;

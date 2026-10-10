@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
-import { getOrder, getPaymentForOrder, initializePaystackPayment } from '@/lib/api';
+import { getOrder, getPaymentForOrder, initializePaystackPayment, verifyPaystackPayment } from '@/lib/api';
 import { ProductImage } from '@/components/ui/ProductImage';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -83,8 +83,17 @@ const getFulfillmentLabel = (method: FulfillmentMethod) => {
 
 export function OrderConfirmationContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { user, refreshUser } = useAuth();
   const { clearCart } = useCart();
+
+  // Paystack return parameters (reference only — never trusted as success).
+  // Prefer `reference`; fall back to `trxref` when absent.
+  const paystackReturnReference =
+    searchParams.get('reference') ?? searchParams.get('trxref');
+  // Guard so the same page/reference never triggers repeated verification
+  // merely because React re-renders.
+  const verifyAttemptedRef = useRef<string | null>(null);
   
   const [order, setOrder] = useState<Order | null>(null);
   const [payment, setPayment] = useState<Payment | null>(null);
@@ -135,13 +144,42 @@ export function OrderConfirmationContent() {
         
         setOrder(orderData);
         setPayment(paymentData);
-        
+
+        // Customer return from Paystack: verify ONCE using the returned
+        // reference while the payment is still PENDING. The backend
+        // re-verifies with Paystack — the query param is only an identity,
+        // never trusted as success.
+        let currentPayment = paymentData;
+        if (
+          paystackReturnReference &&
+          verifyAttemptedRef.current !== paystackReturnReference &&
+          paymentData?.status === 'PENDING' &&
+          paymentData.provider === 'paystack'
+        ) {
+          verifyAttemptedRef.current = paystackReturnReference;
+          try {
+            await verifyPaystackPayment({ reference: paystackReturnReference });
+            if (cancelled) return;
+            const [refreshedOrder, refreshedPayment] = await Promise.all([
+              getOrder(id),
+              getPaymentForOrder(id),
+            ]);
+            if (cancelled) return;
+            setOrder(refreshedOrder);
+            setPayment(refreshedPayment);
+            currentPayment = refreshedPayment;
+          } catch {
+            // Verification errors must not falsely show success — fall
+            // through to the existing safe polling/timeout behavior below.
+          }
+        }
+
         // Start polling ONLY for pending online (Paystack) payments whose webhook
         // may not have arrived yet. CASH payments stay PENDING by design until
         // staff confirm receipt — they must NOT be polled or shown as "processing".
-        if (paymentData?.status === 'PENDING' && paymentData.provider === 'paystack') {
+        if (currentPayment?.status === 'PENDING' && currentPayment.provider === 'paystack') {
           startPolling(id);
-        } else if (paymentData?.status === 'SUCCESS') {
+        } else if (currentPayment?.status === 'SUCCESS') {
           clearCart();
         }
       } catch (err) {
@@ -215,7 +253,7 @@ export function OrderConfirmationContent() {
         clearTimeout(pollingRef.current);
       }
     };
-  }, [params.id, user, refreshUser, clearCart]);
+  }, [params.id, paystackReturnReference, user, refreshUser, clearCart]);
 
   // Retry a failed/pending Paystack payment for this order
   const handleRetryPayment = async () => {

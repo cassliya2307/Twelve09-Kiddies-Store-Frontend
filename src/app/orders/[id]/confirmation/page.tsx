@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { OrderConfirmationContent } from './OrderConfirmationContent';
@@ -39,7 +40,9 @@ export default async function OrderConfirmationPage() {
           </div>
         )}
 
-        <OrderConfirmationContent />
+        <Suspense>
+          <OrderConfirmationContent />
+        </Suspense>
       </main>
 
       <Footer />

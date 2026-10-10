@@ -174,6 +174,8 @@ export const updatePaymentStatus = (id: number, data: PaymentStatusUpdate) =>
 // Paystack
 export const initializePaystackPayment = (data: PaystackInitializeRequest) =>
   api.post<PaystackInitializeResponse>('/payments/paystack/initialize', data);
+export const verifyPaystackPayment = (data: PaystackVerifyRequest) =>
+  api.post<PaystackVerifyResponse>('/payments/paystack/verify', data);
 
 // Admin dashboard
 export const getAdminDashboard = (days: number = 30) => api.get<DashboardResponse>(`/admin/dashboard?days=${days}`);
@@ -242,6 +244,8 @@ import type {
   RegisterRequest,
   PaystackInitializeRequest,
   PaystackInitializeResponse,
+  PaystackVerifyRequest,
+  PaystackVerifyResponse,
   DashboardResponse,
   Expense,
   ExpenseCreate,

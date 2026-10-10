@@ -539,7 +539,11 @@ export function CheckoutContent({ initialAddresses }: CheckoutContentProps) {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Payment Method</h2>
             <div className="space-y-3">
               {(['CASH', 'PAYSTACK', 'CARD', 'TRANSFER'] as const).map(method => {
-                const isAvailable = method === 'CASH' || method === 'PAYSTACK';
+                const isAvailable =
+      method === 'PAYSTACK' ||
+      (method === 'CASH' && fulfillmentMethod === 'STORE_PICKUP')
+        ? true
+        : false;
                 return (
                   <label
                     key={method}
