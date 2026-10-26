@@ -27,6 +27,7 @@ export function LoginContent() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -112,18 +113,42 @@ export function LoginContent() {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Password *
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              minLength={8}
-              disabled={submitting || authLoading}
-              className="w-full px-4 py-2.5 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
-              autoComplete={isLogin ? 'current-password' : 'new-password'}
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                minLength={8}
+                disabled={submitting || authLoading}
+                className="w-full px-4 py-2.5 pr-12 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                autoComplete={isLogin ? 'current-password' : 'new-password'}
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+                onClick={() => setShowPassword(visible => !visible)}
+                disabled={submitting || authLoading}
+                className="absolute inset-y-0 right-0 flex items-center rounded-r-xl px-3 text-cream-600 hover:text-green-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green-700 disabled:cursor-not-allowed"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                  {showPassword ? (
+                    <>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.9 5.2A10.9 10.9 0 0 1 12 5c5 0 8.3 4.5 9 7-.3 1.1-1.2 2.5-2.6 3.7M6.2 6.2C4.3 7.5 3.3 9.5 3 12c.7 2.5 4 7 9 7 1.1 0 2.1-.2 3-.6" />
+                    </>
+                  ) : (
+                    <>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12s3.3-7 9-7 9 7 9 7-3.3 7-9 7-9-7-9-7Z" />
+                      <circle cx="12" cy="12" r="2.5" />
+                    </>
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
 
           {error && !submitting && (

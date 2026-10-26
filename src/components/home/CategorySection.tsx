@@ -23,14 +23,14 @@ const categoryCards = [
     label: 'Educational & Fun Toys',
     href: '/shop',
     color: '#ffe6ee',
-    icon: <BabyIcon />,
+    icon: <BlocksIcon />,
   },
   {
     title: 'Toys & games',
     label: 'Party Packs & Souvenirs',
     href: '/shop',
     color: '#ddf8d9',
-    icon: <TeddyIcon />,
+    icon: <GiftIcon />,
   },
   {
     title: 'Kids fashion',
@@ -44,7 +44,7 @@ const categoryCards = [
     label: 'Daily Essentials',
     href: '/shop',
     color: '#eae2ff',
-    icon: <GiftIcon />,
+    icon: <ShoppingBagIcon />,
   },
 ];
 
@@ -59,25 +59,11 @@ function BackpackIcon() {
   );
 }
 
-function BabyIcon() {
+function BlocksIcon() {
   return (
     <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M10 3h4v4h-4z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6l1 6a4 4 0 0 1-8 0l1-6z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 13c-2.2 1.5-3 3.3-2 5.5C8 20 9.8 20.5 11 19" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 13c2.2 1.5 3 3.3 2 5.5C14 20 12.2 20.5 11 19" />
-    </svg>
-  );
-}
-
-function TeddyIcon() {
-  return (
-    <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 11c0-3 2-5.8 5-5.8 1 0 2.2.6 3 1.6.8-1 2-1.6 3-1.6 3 0 5 2.8 5 5.8 0 3.2-2 5.8-5 5.8H9c-3 0-5-2.6-5-5.8z" />
-      <circle cx="9" cy="8" r="1" />
-      <circle cx="15" cy="8" r="1" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M10 11c.7 1.2 3.3 1.2 4 0" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16c1.5 1.4 4.2 1.4 5.6 0" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.5 4.5h7v7h-7zM13.5 4.5h7v7h-7zM3.5 14.5h7v5h-7zM13.5 14.5h7v5h-7z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M17 7h.01M7 16.5h.01M17 16.5h.01" />
     </svg>
   );
 }
@@ -85,8 +71,7 @@ function TeddyIcon() {
 function TshirtIcon() {
   return (
     <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 8l3-3 4 2 4-2 4 3 2 7-4 3-3-4-4 4-4-4-3 4-4-3 2-7z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8 17l4 4 4-4" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 4 4.5 5.5 2.5 11l3.5 2 2-3v10h12V10l2 3 3.5-2-2-5.5L18 4l-3 2h-4L8 4z" />
     </svg>
   );
 }
@@ -94,10 +79,17 @@ function TshirtIcon() {
 function GiftIcon() {
   return (
     <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 10h16v12H4z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v12" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 14h16" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10s-3-5-3-7 2-2 3-1 3 2 3 3-2 5-3 5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 10h16v11H4zM3 7h18v3H3zM12 7v14" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 7H8.5a2.5 2.5 0 1 1 2.5-2.5V7Zm0 0h3.5a2.5 2.5 0 1 0-2.5-2.5V7Z" />
+    </svg>
+  );
+}
+
+function ShoppingBagIcon() {
+  return (
+    <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14l1 13H4L5 8Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 8V6a3 3 0 0 1 6 0v2M9 13h6" />
     </svg>
   );
 }
