@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Category - Twelve09 Kiddies Store",
+  title: "Category - Twelve'09 Kiddies Store",
   description: "Shop by category",
 };
 

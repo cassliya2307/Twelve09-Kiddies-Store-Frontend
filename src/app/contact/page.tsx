@@ -5,8 +5,8 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Contact - Twelve09 Kiddies Store",
-  description: "Contact Twelve09 Kiddies Store for inquiries and support.",
+  title: "Contact - Twelve'09 Kiddies Store",
+  description: "Contact Twelve'09 Kiddies Store for inquiries and support.",
 };
 
 export default function ContactPage() {
@@ -44,7 +44,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Email</h3>
                   <p className="text-cream-600">
-                    <a href="mailto:twelve09kiddiesstore@gmail.com" className="text-green-600 hover:text-green-700 transition-colors" aria-label="Email Twelve09">
+                    <a href="mailto:twelve09kiddiesstore@gmail.com" className="text-green-600 hover:text-green-700 transition-colors" aria-label="Email Twelve'09 Kiddies Store">
                       twelve09kiddiesstore@gmail.com
                     </a>
                   </p>

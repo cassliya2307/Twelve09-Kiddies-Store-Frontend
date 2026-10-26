@@ -34,7 +34,7 @@ export function Hero() {
 
             <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-start">
               <Link href="/shop" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto rounded-full bg-green-700 px-8 py-3 text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-900/20 transition hover:bg-green-800">
+                <Button size="lg" className="w-full sm:w-auto rounded-full px-8 py-3 text-sm font-black uppercase tracking-wide shadow-lg">
                   Shop New Arrivals
                 </Button>
               </Link>

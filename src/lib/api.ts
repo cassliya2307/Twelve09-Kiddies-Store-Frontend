@@ -211,6 +211,37 @@ export const getAdminUsers = (params?: GetAdminUsersParams) => {
   const query = searchParams.toString();
   return api.get<User[]>(`/admin/users${query ? `?${query}` : ''}`);
 };
+
+export interface GetCustomersParams {
+  is_active?: boolean;
+  search?: string;
+  skip?: number;
+  limit?: number;
+}
+
+export const getCustomers = (params?: GetCustomersParams) => {
+  const searchParams = new URLSearchParams();
+  if (params?.is_active !== undefined) searchParams.set('is_active', String(params.is_active));
+  if (params?.search) {
+    const trimmed = params.search.trim();
+    if (trimmed) searchParams.set('search', trimmed);
+  }
+  if (params?.skip) searchParams.set('skip', params.skip.toString());
+  if (params?.limit) searchParams.set('limit', params.limit.toString());
+  const query = searchParams.toString();
+  return api.get<CustomerListResponse>(`/admin/customers${query ? `?${query}` : ''}`);
+};
+
+export const getCustomerOrders = (customerId: number, params?: { skip?: number; limit?: number }) => {
+  const searchParams = new URLSearchParams();
+  if (params?.skip) searchParams.set('skip', params.skip.toString());
+  if (params?.limit) searchParams.set('limit', params.limit.toString());
+  const query = searchParams.toString();
+  return api.get<CustomerOrderHistoryResponse>(
+    `/admin/customers/${customerId}/orders${query ? `?${query}` : ''}`
+  );
+};
+
 export const updateUserRole = (id: number, data: { role?: string; is_active?: boolean }) =>
   api.patch<User>(`/admin/users/${id}/role`, data);
 export const updateUserPermissions = (id: number, permissions: string[]) =>
@@ -251,4 +282,6 @@ import type {
   ExpenseCreate,
   DeliveryFeeRead,
   DeliveryFeeUpdate,
+  CustomerListResponse,
+  CustomerOrderHistoryResponse,
 } from '@/types/api';

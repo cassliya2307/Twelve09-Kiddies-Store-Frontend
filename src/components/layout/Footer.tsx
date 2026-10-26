@@ -43,13 +43,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <Link href="/" className="flex items-center gap-2" aria-label="Twelve’09 Kiddies Store Home">
+            <Link href="/" className="flex items-center gap-2" aria-label="Twelve'09 Kiddies Store Home">
               <span className="flex items-center justify-center">
-                <img src="/twelve09-logo-removebg-preview.png" alt="Twelve’09 Kiddies Store" className="h-16 w-auto object-contain sm:h-20" />
+                <img src="/twelve09-logo-removebg-preview.png" alt="Twelve'09 Kiddies Store" className="h-16 w-auto object-contain sm:h-20" />
               </span>
             </Link>
             <p className="text-cream-600 text-sm max-w-xs">
-              Bringing joy to every child's world with carefully curated toys, games, and educational products.
+              Bringing joy to every child&apos;s world with carefully curated toys, games, and educational products.
             </p>
             <div className="flex flex-wrap gap-4">
               {socialLinks.map((social) => (
@@ -117,7 +117,7 @@ export function Footer() {
 
           <div className="md:col-span-3 xl:col-span-3 mt-12 border-t border-cream-200 pt-8">
             <p className="text-sm text-cream-500 text-center">
-              &copy; {new Date().getFullYear()} Twelve’09 Kiddies Store. All rights reserved.
+              &copy; {new Date().getFullYear()} Twelve&apos;09 Kiddies Store. All rights reserved.
             </p>
           </div>
         </div>

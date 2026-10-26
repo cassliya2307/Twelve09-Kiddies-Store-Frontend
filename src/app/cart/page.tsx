@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Shopping Cart - Twelve09 Kiddies Store",
+  title: "Shopping Cart - Twelve'09 Kiddies Store",
   description: "Review your cart and proceed to checkout.",
 };
 

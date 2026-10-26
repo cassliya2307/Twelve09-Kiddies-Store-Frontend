@@ -5,8 +5,8 @@ import { LoginContent } from './LoginContent';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Sign In - Twelve09 Kiddies Store",
-  description: "Sign in to your Twelve09 Kiddies Store account.",
+  title: "Sign In - Twelve'09 Kiddies Store",
+  description: "Sign in to your Twelve'09 Kiddies Store account.",
 };
 
 export default function LoginPage() {

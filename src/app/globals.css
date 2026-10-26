@@ -23,6 +23,10 @@
   --green-600: #6ba74e;
   --green-700: #477a35;
   --green-800: #264d2b;
+  --lime-primary: #b7e849;
+  --lime-hover: #a7d735;
+  --lime-active: #96c52e;
+  --lime-foreground: #27342b;
   --orange-500: #f28b62;
   --pink-500: #e99ca0;
   --charcoal: #27342b;
@@ -43,6 +47,10 @@
   --color-cream-700: var(--cream-700);
   --color-cream-800: var(--cream-800);
   --color-cream-900: var(--cream-900);
+  --color-lime-primary: var(--lime-primary);
+  --color-lime-hover: var(--lime-hover);
+  --color-lime-active: var(--lime-active);
+  --color-lime-foreground: var(--lime-foreground);
   --font-sans: var(--font-inter);
 }
 

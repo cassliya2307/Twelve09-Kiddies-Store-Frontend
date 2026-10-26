@@ -11,8 +11,8 @@ import type { Category, ProductListItem } from '@/types/api';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Twelve09 Kiddies Store - Toys, Games & Educational Products for Children",
-  description: "Discover joy in every toy! Shop our curated collection of educational toys, creative games, and delightful surprises for children of all ages.",
+  title: "Everything Little Ones Love, All in One Place.",
+  description: "Shop Back to School Essentials, Educational & Fun Toys, Party Packs & Souvenirs, Kids Fashion, and Daily Essentials.",
 };
 
 export default async function Home() {

@@ -53,7 +53,7 @@ export function LoginContent() {
   return (
     <div className="mx-auto max-w-md px-4 py-12 sm:px-6 sm:py-16 md:py-24">
       <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-2" aria-label="Twelve09 Kiddies Store Home">
+        <Link href="/" className="inline-flex items-center gap-2" aria-label="Twelve'09 Kiddies Store Home">
           <svg className="h-10 w-10 text-green-600" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="16" cy="16" r="14" stroke="#16A34A" strokeWidth="2"/>
             <path d="M16 8C11.5817 8 8 11.5817 8 16C8 20.4183 11.5817 24 16 24C20.4183 24 24 20.4183 24 16C24 11.5817 20.4183 8 16 8Z" stroke="#16A34A" strokeWidth="2"/>
@@ -61,7 +61,7 @@ export function LoginContent() {
           </svg>
         </Link>
         <h1 className="mt-6 text-3xl font-bold text-gray-900">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
-        <p className="mt-2 text-cream-600">{isLogin ? 'Sign in to your account' : 'Join Twelve09 Kiddies Store'}</p>
+        <p className="mt-2 text-cream-600">{isLogin ? 'Sign in to your account' : "Join Twelve'09 Kiddies Store"}</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-cream-200 p-6 sm:p-8">

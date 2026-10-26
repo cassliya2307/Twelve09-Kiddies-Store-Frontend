@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Shop - Twelve09 Kiddies Store",
+  title: "Shop - Twelve'09 Kiddies Store",
   description: "Browse our complete collection of toys, games, and educational products for children.",
 };
 

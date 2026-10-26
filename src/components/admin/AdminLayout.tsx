@@ -22,6 +22,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Expenses', href: '/admin/expenses', permission: 'MANAGE_EXPENSES' },
   { label: 'Staff', href: '/admin/staff', adminOnly: true },
   { label: 'Delivery Fee', href: '/admin/delivery-fee', adminOnly: true },
+  { label: 'Customers', href: '/admin/customers', permission: 'MANAGE_CUSTOMERS' },
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -58,7 +59,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex w-64 bg-white border-r border-cream-200 flex-col">
         <div className="p-6 border-b border-cream-200">
           <Link href="/admin" className="flex items-center gap-2" aria-label="Admin Home">
-            <span className="text-xl font-bold text-green-800">Twelve09</span>
+            <span className="text-xl font-bold text-green-800">Twelve&apos;09 Kiddies</span>
             <span className="text-sm text-cream-600">Admin</span>
           </Link>
           {user && (

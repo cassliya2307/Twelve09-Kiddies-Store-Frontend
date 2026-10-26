@@ -5,7 +5,7 @@ import { CheckoutContent } from './CheckoutContent';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Checkout - Twelve09 Kiddies Store",
+  title: "Checkout - Twelve'09 Kiddies Store",
   description: "Complete your purchase securely.",
 };
 

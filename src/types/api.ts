@@ -157,6 +157,31 @@ export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'READY_FOR_PI
 
 export type FulfillmentMethod = 'STORE_DELIVERY' | 'CUSTOMER_DISPATCH' | 'STORE_PICKUP';
 
+export interface CustomerSummary {
+  id: number;
+  name: string;
+  email: string;
+  role: 'CUSTOMER';
+  is_active: boolean;
+}
+
+export interface CustomerListResponse {
+  items: CustomerSummary[];
+  has_more: boolean;
+}
+
+export interface CustomerOrderSummary {
+  id: number;
+  total_amount: number;
+  status: OrderStatus;
+  created_at: string | null;
+}
+
+export interface CustomerOrderHistoryResponse {
+  items: CustomerOrderSummary[];
+  has_more: boolean;
+}
+
 export interface OrderItemRead {
   id: number;
   order_id: number;

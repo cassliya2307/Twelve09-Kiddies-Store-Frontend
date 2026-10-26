@@ -7,6 +7,7 @@ export type SupportedPermission =
   | 'MANAGE_PRODUCTS'
   | 'MANAGE_INVENTORY'
   | 'MANAGE_ORDERS'
+  | 'MANAGE_CUSTOMERS'
   | 'MANAGE_EXPENSES';
 
 const SUPPORTED_PERMISSIONS: SupportedPermission[] = [
@@ -14,6 +15,7 @@ const SUPPORTED_PERMISSIONS: SupportedPermission[] = [
   'MANAGE_PRODUCTS',
   'MANAGE_INVENTORY',
   'MANAGE_ORDERS',
+  'MANAGE_CUSTOMERS',
   'MANAGE_EXPENSES',
 ];
 

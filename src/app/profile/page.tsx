@@ -1,69 +1,66 @@
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
+import { getOrders } from '@/lib/api';
+import { formatDate, formatPrice } from '@/lib/format';
+import { getFulfillmentLabel, getOrderStatusView } from '@/lib/statusLabels';
+import type { Order } from '@/types/api';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+interface ProfileAddress {
+  id: number;
+  title: string;
+  address: string;
+  isDefault: boolean;
+}
+
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'account'>('orders');
-  const [orders, setOrders] = useState<any[]>([]);
-  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
-  const [addresses, setAddresses] = useState<any[]>([
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [ordersError, setOrdersError] = useState(false);
+  const [retryOrders, setRetryOrders] = useState(0);
+  const [addresses, setAddresses] = useState<ProfileAddress[]>([
     { id: 1, title: 'Home / Delivery', address: '12 Lekki Expressway, Victoria Island, Lagos', isDefault: true },
   ]);
   const [newAddressText, setNewAddressText] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/orders/my-orders', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setOrders(data.orders || data || []))
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login?redirect=/profile');
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+
+    let cancelled = false;
+    getOrders()
+      .then((data) => {
+        if (cancelled) return;
+        setOrders(data);
+        setOrdersError(false);
+      })
       .catch(() => {
-        setOrders([
-          {
-            id: 'ORD-9382',
-            date: 'Sept 9, 2026',
-            total: 15000,
-            status: 'Shipped',
-            items: 'Toddler Summer Promo Set (x1)',
-            steps: [
-              { title: 'Order Placed', completed: true, date: 'Sept 9, 10:00 AM' },
-              { title: 'Order Packed', completed: true, date: 'Sept 9, 02:30 PM' },
-              { title: 'Order Shipped', completed: true, date: 'Sept 10, 09:00 AM' },
-              { title: 'Delivered', completed: false, date: 'Estimated Sept 11' },
-            ],
-          },
-          {
-            id: 'ORD-9383',
-            date: 'Sept 10, 2026',
-            total: 8500,
-            status: 'Processing',
-            items: 'Kiddies Play Mat Bundle (x1)',
-            steps: [
-              { title: 'Order Placed', completed: true, date: 'Sept 10, 11:15 AM' },
-              { title: 'Order Packed', completed: false, date: 'Pending' },
-              { title: 'Order Shipped', completed: false, date: 'Pending' },
-              { title: 'Delivered', completed: false, date: 'Pending' },
-            ],
-          },
-        ]);
+        if (!cancelled) setOrdersError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setOrdersLoading(false);
       });
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authLoading, isAuthenticated, retryOrders]);
 
   const handleLogout = () => {
     logout();
     router.push('/login');
-  };
-
-  const toggleTracking = (id: string) => {
-    setExpandedOrderId(expandedOrderId === id ? null : id);
   };
 
   const handleAddAddress = (e: React.FormEvent) => {
@@ -90,6 +87,22 @@ export default function ProfilePage() {
   };
 
   const role = user?.role?.toLowerCase();
+
+  if (authLoading) {
+    return (
+      <main className="mx-auto max-w-5xl px-4 py-10" role="status" aria-live="polite">
+        <p className="text-sm text-gray-500">Checking your account…</p>
+      </main>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <main className="mx-auto max-w-5xl px-4 py-10" role="status" aria-live="polite">
+        <p className="text-sm text-gray-500">Redirecting to sign in…</p>
+      </main>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -162,60 +175,62 @@ export default function ProfilePage() {
       {/* Tab Content: Orders */}
       {activeTab === 'orders' && (
         <div className="rounded-2xl border border-cream-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-bold text-gray-900">Order History & Live Tracking</h2>
-          {orders.length === 0 ? (
-            <p className="text-sm text-gray-500">You haven't placed any orders yet.</p>
+          <h2 className="mb-4 text-lg font-bold text-gray-900">Order History</h2>
+          {ordersLoading ? (
+            <p className="text-sm text-gray-500" role="status" aria-live="polite">Loading your orders…</p>
+          ) : ordersError ? (
+            <div className="rounded-xl border border-red-200 bg-red-50 p-4" role="alert">
+              <p className="text-sm text-red-700">We couldn&apos;t load your order history. Please try again.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setOrdersLoading(true);
+                  setOrdersError(false);
+                  setRetryOrders((attempt) => attempt + 1);
+                }}
+                className="mt-3 rounded-lg border border-red-300 bg-white px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100"
+              >
+                Try again
+              </button>
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="rounded-xl bg-cream-50 p-5 text-center">
+              <p className="text-sm text-gray-600">You haven&apos;t placed any orders yet.</p>
+              <Link href="/shop" className="mt-3 inline-block text-sm font-bold text-green-800 hover:text-green-700">
+                Browse the shop
+              </Link>
+            </div>
           ) : (
             <div className="space-y-4">
-              {orders.map((ord, idx) => (
-                <div key={ord.id || idx} className="rounded-xl border border-cream-200 bg-white p-5">
+              {orders.map((ord) => (
+                <div key={ord.id} className="rounded-xl border border-cream-200 bg-white p-5">
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-gray-900">{ord.id}</span>
+                        <span className="font-bold text-gray-900">Order #{ord.id}</span>
                         <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-[10px] font-bold text-green-700">
-                          {ord.status || 'Processing'}
+                          {getOrderStatusView(ord.status).label}
                         </span>
                       </div>
-                      <p className="mt-1 text-xs text-gray-400">{ord.date || 'Recent'}</p>
-                      <p className="mt-2 text-xs font-semibold text-gray-700">{ord.items || 'Store purchase items'}</p>
+                      <p className="mt-1 text-xs text-gray-400">Placed {formatDate(ord.created_at)}</p>
+                      <p className="mt-2 text-xs text-gray-500">{getFulfillmentLabel(ord.fulfillment_method)}</p>
                     </div>
                     <div className="flex items-center justify-between gap-4 border-t border-cream-100 pt-3 sm:justify-end sm:border-t-0 sm:pt-0">
-                      <span className="text-base font-black text-green-800">₦{(ord.total || 0).toLocaleString()}</span>
-                      <button
-                        onClick={() => toggleTracking(ord.id)}
-                        className="rounded-xl border border-green-700 bg-green-50 px-4 py-2 text-xs font-bold text-green-800 transition-colors hover:bg-green-100"
-                      >
-                        {expandedOrderId === ord.id ? 'Hide Tracking' : 'Track Order'}
-                      </button>
+                      <span className="text-base font-black text-green-800">{formatPrice(ord.total_amount)}</span>
                     </div>
                   </div>
 
-                  {expandedOrderId === ord.id && (
-                    <div className="mt-6 border-t border-cream-100 pt-5">
-                      <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">Shipment Progress</p>
-                      <div className="relative space-y-6 pl-6 before:absolute before:bottom-2 before:left-2.5 before:top-2 before:w-0.5 before:bg-green-200">
-                        {(ord.steps || [
-                          { title: 'Order Placed', completed: true, date: ord.date },
-                          { title: 'Order Packed', completed: true, date: 'In progress' },
-                          { title: 'Order Shipped', completed: false, date: 'Pending' },
-                          { title: 'Delivered', completed: false, date: 'Pending' },
-                        ]).map((step: any, stepIdx: number) => (
-                          <div key={stepIdx} className="relative flex items-start gap-4">
-                            <span className={`absolute -left-6 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
-                              step.completed ? 'bg-green-900 text-white' : 'bg-gray-200 text-gray-500'
-                            }`}>
-                              {step.completed ? '✓' : '•'}
-                            </span>
-                            <div>
-                              <p className={`text-sm font-bold ${step.completed ? 'text-gray-900' : 'text-gray-400'}`}>{step.title}</p>
-                              <p className="text-xs text-gray-500">{step.date}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <div className="mt-4 border-t border-cream-100 pt-4">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">Items</p>
+                    <ul className="space-y-2">
+                      {ord.order_items.map((item) => (
+                        <li key={item.id} className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm text-gray-700">
+                          <span>Product #{item.product_id} × {item.quantity}</span>
+                          <span>{formatPrice(item.subtotal)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ))}
             </div>

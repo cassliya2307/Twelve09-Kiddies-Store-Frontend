@@ -217,14 +217,14 @@ export function CartContent({ categories }: CartContentProps) {
             </Link>
             <Link
               href="/checkout"
-              className={`block w-full text-center px-6 py-3 text-base font-medium rounded-xl bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors ${items.length === 0 ? 'pointer-events-none opacity-50' : ''}`}
+              className={`block w-full text-center px-6 py-3 text-base font-medium rounded-xl bg-lime-primary text-lime-foreground hover:bg-lime-hover active:bg-lime-active focus:outline-none focus-visible:ring-2 focus-visible:ring-green-800 focus-visible:ring-offset-2 transition-colors ${items.length === 0 ? 'pointer-events-none opacity-50' : ''}`}
               aria-disabled={items.length === 0}
             >
               Proceed to Checkout
             </Link>
 
             <p className="mt-4 text-center text-xs text-cream-500">
-              Secure checkout powered by Twelve09 Kiddies Store
+              Secure checkout powered by Twelve&apos;09 Kiddies Store
             </p>
           </div>
         </div>

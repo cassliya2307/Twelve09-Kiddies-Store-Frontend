@@ -71,12 +71,14 @@ export function TrustBenefits({ isLoading }: { isLoading?: boolean }) {
   return (
     <section className="bg-white py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-green-800">Our promise</span>
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-charcoal sm:text-4xl">Why Choose Twelve’09?</h2>
+            <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-green-800">Twelve&apos;09 Kiddies Store</span>
+            <h2 className="mt-4 text-3xl font-black tracking-tight text-charcoal sm:text-4xl">Our Promise</h2>
           </div>
-          <p className="max-w-md text-sm font-bold text-cream-700">We’re committed to quality play, thoughtful discovery, and happy family shopping.</p>
+          <div className="max-w-xl space-y-3 text-sm font-medium leading-relaxed text-cream-700">
+            <p>Everything Little Ones Love, All in One Place.</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

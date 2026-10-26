@@ -65,10 +65,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const product = await getProduct(productId);
     return {
       title: product.name,
-      description: product.description?.slice(0, 160) || `View ${product.name} at Twelve09 Kiddies Store`,
+      description: product.description?.slice(0, 160) || `View ${product.name} at Twelve'09 Kiddies Store`,
       openGraph: {
         title: product.name,
-        description: product.description?.slice(0, 160) || `View ${product.name} at Twelve09 Kiddies Store`,
+        description: product.description?.slice(0, 160) || `View ${product.name} at Twelve'09 Kiddies Store`,
         type: 'website',
         images: product.image_url ? [product.image_url] : [],
       },

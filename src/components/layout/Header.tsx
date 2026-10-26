@@ -50,11 +50,11 @@ export function Header() {
       <div className="flex flex-col">
         <div className="flex w-full items-center justify-between gap-2 px-3 py-3 sm:px-6 lg:px-8">
           <div className="flex min-w-0 shrink-0 items-center">
-            <Link href="/" className="flex items-center gap-3" aria-label="Twelve’09 Kiddies Store Home">
+            <Link href="/" className="flex items-center gap-3" aria-label="Twelve'09 Kiddies Store Home">
               <span className="flex items-center justify-center">
                 <img
                   src="/twelve09-logo-removebg-preview.png"
-                  alt="Twelve’09 Kiddies Store"
+                  alt="Twelve'09 Kiddies Store"
                   className="h-[52px] w-[150px] object-contain sm:h-[58px] sm:w-[170px] md:h-[68px] md:w-[220px] lg:h-[70px] lg:w-[310px]"
                 />
               </span>
